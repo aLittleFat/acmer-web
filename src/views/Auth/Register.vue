@@ -204,18 +204,22 @@
             email: that.formInline.email
           })
           .then(res => {
-            that.getCodeButtonContent = that.totalTime + 's后重新发送'
-            that.getCodeDisable = true
-              let clock = window.setInterval(() => {
-                that.totalTime--
-                that.getCodeButtonContent = that.totalTime + 's后重新发送'
-                if (that.totalTime < 0) {
-                    window.clearInterval(clock)
-                    that.getCodeButtonContent = '重新发送验证码'
-                    that.totalTime = 60
-                    that.getCodeDisable = false
-                }
-              }, 1000)
+            if (res.data === true) {
+              that.getCodeButtonContent = that.totalTime + 's后重新发送'
+              that.getCodeDisable = true
+                let clock = window.setInterval(() => {
+                  that.totalTime--
+                  that.getCodeButtonContent = that.totalTime + 's后重新发送'
+                  if (that.totalTime < 0) {
+                      window.clearInterval(clock)
+                      that.getCodeButtonContent = '重新发送验证码'
+                      that.totalTime = 60
+                      that.getCodeDisable = false
+                  }
+                }, 1000)
+            } else {
+              that.$Message.error(res.data)
+            }
           })
           .catch(error => {
             console.log(error)
@@ -242,6 +246,8 @@
                 if (res.data === true) {
                    that.$Message.info('注册成功，请等到管理员审核')
                    router.push('Login')
+                } else {
+                  that.$Message.error(res.data)
                 }
               })
             .catch(function (error) { // 请求失败处理

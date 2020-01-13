@@ -1,5 +1,5 @@
 <template>
-  <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
+  <Form ref="formInline" :model="formInline" :rules="ruleInline">
     <FormItem prop="email">
       <Input type="text" v-model="formInline.email" placeholder="Email">
       <Icon type="ios-person-outline" slot="prepend"></Icon>
@@ -10,12 +10,23 @@
       <Icon type="ios-lock-outline" slot="prepend"></Icon>
       </Input>
     </FormItem>
-    <FormItem>
-      <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
-    </FormItem>
-    <FormItem>
-      <Button type="primary" @click="register()">注册</Button>
-    </FormItem>
+    <Row>
+      <Col span="4" offset="6">
+        <FormItem>
+          <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
+        </FormItem>
+      </Col>
+      <Col span="4" offset="4">
+        <FormItem>
+          <Button type="primary" @click="register()">注册</Button>
+        </FormItem>
+      </Col>
+    </Row>
+    <Row type="flex" justify="end" class="code-row-bg">
+      <FormItem>
+        <router-link to="forgetpassword">忘记密码</router-link>
+      </FormItem>
+    </Row>
   </Form>
 </template>
 <script>

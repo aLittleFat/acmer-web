@@ -26,20 +26,19 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Auth/Auth.vue'),
     'children': [
       {
-        path: 'Login',
-        name: 'Login',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/Auth/Login.vue')
+        path: 'login',
+        name: '登录',
+        component: () => import('../views/Auth/Login.vue')
       },
       {
-        path: 'Register',
-        name: 'Register',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/Auth/Register.vue')
+        path: 'register',
+        name: '注册',
+        component: () => import('../views/Auth/Register.vue')
+      },
+      {
+        path: 'forgetpassword',
+        name: '忘记密码',
+        component: () => import('../views/Auth/ForgetPassword.vue')
       }
     ]
   }
