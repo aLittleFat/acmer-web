@@ -5,31 +5,26 @@
       <Icon type="ios-mail-outline" slot="prepend"></Icon>
       </Input>
     </FormItem>
-    <!-- <Row type="flex" justify="space-between" class="code-row-bg"> -->
-      <!-- <Col span="9"> -->
-        <FormItem prop="verifyCode">
-          <Input type="text" v-model="formInline.verifyCode" placeholder="验证码">
-          <Icon type="ios-mail-outline" slot="prepend"></Icon>
-          <Button type="primary" @click="getCode()" v-model="getCodeButtonContent" :disabled="getCodeDisable" slot="append">{{getCodeButtonContent}}</Button>
-          </Input>
-        </FormItem>
-      <!-- </Col> -->
-      <!-- <Col span="4"> -->
-      <!-- </Col> -->
+      <FormItem prop="verifyCode">
+        <Input type="text" v-model="formInline.verifyCode" placeholder="验证码">
+        <Icon type="ios-code" slot="prepend"></Icon>
+        <Button type="primary" @click="getCode()" v-model="getCodeButtonContent" :disabled="getCodeDisable" slot="append">{{getCodeButtonContent}}</Button>
+        </Input>
+      </FormItem>
     </Row>
     <FormItem prop="password">
       <Input type="password" v-model="formInline.password" placeholder="密码">
       <Icon type="ios-lock-outline" slot="prepend"></Icon>
       </Input>
     </FormItem>
-    <FormItem prop="passwordAgain">
-      <Input type="password" v-model="formInline.passwordAgain" placeholder="再次输入密码">
+    <FormItem prop="confirmPwd">
+      <Input type="password" v-model="formInline.confirmPwd" placeholder="再次输入密码">
       <Icon type="ios-lock-outline" slot="prepend"></Icon>
       </Input>
     </FormItem>
     <FormItem prop="name">
       <Input type="text" v-model="formInline.name" placeholder="姓名">
-      <Icon type="ios-mail-outline" slot="prepend"></Icon>
+      <Icon type="ios-person-outline" slot="prepend"></Icon>
       </Input>
     </FormItem>
     <FormItem prop="phone">
@@ -45,12 +40,12 @@
     <div v-if="formInline.role === '学生'">
       <FormItem prop="grade">
         <Input type="text" v-model="formInline.grade" placeholder="年级">
-        <Icon type="ios-person-outline" slot="prepend"></Icon>
+        <Icon type="ios-time-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
       <FormItem prop="id">
         <Input type="text" v-model="formInline.id" placeholder="学号">
-        <Icon type="ios-person-outline" slot="prepend"></Icon>
+        <Icon type="ios-school-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
     </div>
@@ -69,17 +64,22 @@
   </Form>
 </template>
 <script>
-  // axios.defaults.baseURL = 'http://localhost:8081/'
-  // axios.defaults.withCredentials = true
-  import router from '../../router'
+  import router from '@/router'
   export default {
-    name: 'Login',
     data () {
+      const valiConfirmPwd = (rule, value, callback) => {
+          if (value !== this.formInline.password) {
+              callback(new Error('两次输入的密码不一致'))
+          } else {
+              callback()
+          }
+      }
+
       return {
         formInline: {
           email: '',
           password: '',
-          passwordAgain: '',
+          confirmPwd: '',
           phone: '',
           role: '',
           id: '',
@@ -115,20 +115,80 @@
               min: 6,
               message: '密码最少6位',
               trigger: 'blur'
+            },
+            {
+              type: 'string',
+              max: 16,
+              message: '密码最多16位',
+              trigger: 'blur'
+            },
+            {
+              pattern: /^\S{6,16}/,
+              message: '密码不能包含空格',
+              trigger: 'blur'
             }
           ],
-          passwordAgain: [{
+          confirmPwd: [{
               required: true,
               message: '请再次输入密码',
               trigger: 'blur'
             },
             {
-              type: 'string',
-              min: 6,
-              message: '密码最少6位',
+              validator: valiConfirmPwd,
+              message: '两次输入的密码不同',
               trigger: 'blur'
             }
-          ]
+          ],
+          name: [{
+            required: true,
+            message: '请输入姓名',
+            trigger: 'blur'
+          }],
+          verifyCode: [{
+              required: true,
+              message: '请输入验证码',
+              trigger: 'blur'
+            },
+            {
+              pattern: /\d{6}$/,
+              message: '请输入6位数字验证码',
+              trigger: 'blur'
+          }],
+          phone: [{
+              required: true,
+              message: '请输入手机号码',
+              trigger: 'blur'
+            },
+            {
+              pattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|170|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
+              message: '手机号码格式错误',
+              trigger: 'blur'
+          }],
+          role: [{
+            required: true,
+            message: '请选择注册的用户角色',
+            trigger: 'blur'
+          }],
+          grade: [{
+              required: true,
+              message: '请输入年级',
+              trigger: 'blur'
+            },
+            {
+              pattern: /^(2)\d{3}$/,
+              message: '请输入4位年级',
+              trigger: 'blur'
+          }],
+          id: [{
+              required: true,
+              message: '请输入学号',
+              trigger: 'blur'
+            },
+            {
+              pattern: /^(2)\d{11}$/,
+              message: '请输入12位学号',
+              trigger: 'blur'
+          }]
         }
       }
     },

@@ -19,32 +19,41 @@
   </Form>
 </template>
 <script>
-  // axios.defaults.baseURL = 'http://localhost:8081/'
-  // axios.defaults.withCredentials = true
-  import router from '../../router'
+  import router from '@/router'
   export default {
-    name: 'Login',
     data () {
       return {
         formInline: {
-          user: '',
+          email: '',
           password: ''
         },
         ruleInline: {
-          user: [{
-            required: true,
-            message: 'Please fill in the user name',
-            trigger: 'blur'
-          }],
+          email: [{
+              required: true,
+              message: '请输入邮箱',
+              trigger: 'blur'
+            },
+            {
+              type: 'email',
+              message: '邮箱格式错误',
+              trigger: 'blur'
+            }
+          ],
           password: [{
               required: true,
-              message: 'Please fill in the password.',
+              message: '请输入密码',
               trigger: 'blur'
             },
             {
               type: 'string',
               min: 6,
-              message: 'The password length cannot be less than 6 bits',
+              message: '密码最少6位',
+              trigger: 'blur'
+            },
+            {
+              type: 'string',
+              max: 16,
+              message: '密码最多16位',
               trigger: 'blur'
             }
           ]
@@ -70,8 +79,8 @@
                     that.$Message.error(res.data)
                   }
               })
-            .catch(function (error) { // 请求失败处理
-                that.$Message.error(error.data)
+            .catch(function (error) {
+              that.$Message.error(error.data)
             })
           } else {
             that.$Message.error('请正确输入表单!')
@@ -79,7 +88,7 @@
         })
       },
       register () {
-        router.push('Register')
+        router.push('register')
       }
     }
   }
