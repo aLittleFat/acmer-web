@@ -26,15 +26,22 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    // console.log(response)
+    if (response.status === 203) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+      router.replace('/auth/login')
+      this.$Message.info('登录过期')
+    }
     return response
   },
   error => {
-    // console.log(error)
     if (error.response) {
       switch (error.response.status) {
-        case 203:
-          router.replace('/Auth/Login')
+        case 203: {
+          localStorage.removeItem('token')
+          localStorage.removeItem('userId')
+          router.replace('/auth/login')
+        }
       }
     }
     return Promise.reject(error.response)

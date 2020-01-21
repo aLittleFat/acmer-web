@@ -26,6 +26,11 @@
       <FormItem>
         <router-link to="forgetpassword">忘记密码</router-link>
       </FormItem>
+      <Col offset="1">
+        <FormItem>
+          <router-link to="/">游客登录</router-link>
+        </FormItem>
+      </Col>
     </Row>
   </Form>
 </template>
@@ -82,8 +87,11 @@
                 password: that.formInline.password
               })
               .then(res => {
-                  if (res.data === true) {
+                  if (/^\d+$/.test(res.data)) {
                     window.localStorage['token'] = res.headers.token
+                    window.localStorage['userId'] = res.data
+                    console.log(res.headers.token)
+                    console.log(localStorage.token)
                     that.$Message.info('登录成功')
                     router.push('/')
                   } else {
