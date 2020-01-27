@@ -23,6 +23,30 @@
         </Card>
       </Col>
     </Row>
+    <br>
+    <Row>
+      <Col span="8">
+        <Card>
+            <p slot="title">HDU</p>
+            <div v-if="HduAccount===''">
+              <Button size="small" type="success" @click="handleShowAddOjAccountModal('HDU')">添加</Button>
+            </div>
+            <div v-else>
+              <Row>
+                <Col span="6">
+                  <a :href="handleGetAccountHref('http://acm.hdu.edu.cn/userstatus.php?user=', HduAccount)" target="_blank">{{ HduAccount }}</a>
+                </Col>
+                <Col offset="2" span="3">
+                  <Button size="small" type="warning" @click="handleShowChangeOjAccountModal('HDU')">修改</Button>
+                </Col>
+                <Col offset="1" span="3">
+                  <Button size="small" type="error" @click="confirmDelete('HDU')">删除</Button>
+                </Col>
+              </Row>
+            </div>
+        </Card>
+      </Col>
+    </Row>
     <Modal
       v-model="addOjAccountModal"
       :title="handleTitle">
@@ -78,7 +102,8 @@
         },
         add_loading: false,
         change_loading: false,
-        VjAccount: ''
+        VjAccount: '',
+        HduAccount: ''
       }
     },
     methods: {
@@ -98,7 +123,7 @@
             that.add_loading = false
             if (res.data === true) {
               that.$Message.success('添加成功')
-              setTimeout(function () { that.$router.go(0) }, 2000)
+              setTimeout(function () { that.$router.go(0) }, 1000)
             } else {
               that.$Message.error(res.data)
             }
@@ -117,7 +142,7 @@
             that.change_loading = false
             if (res.data === true) {
               that.$Message.success('修改成功')
-              setTimeout(function () { that.$router.go(0) }, 2000)
+              setTimeout(function () { that.$router.go(0) }, 1000)
             } else {
               that.$Message.error(res.data)
             }
@@ -132,7 +157,7 @@
           .then(res => {
             if (res.data === true) {
               that.$Message.success('删除成功')
-              setTimeout(function () { that.$router.go(0) }, 2000)
+              setTimeout(function () { that.$router.go(0) }, 1000)
             } else {
               that.$Message.error(res.data)
             }
@@ -177,6 +202,15 @@
         })
         .then(res => {
           that.VjAccount = res.data
+        })
+      that.$http
+        .get('/api/student/ojaccount/getMyOjAccount', {
+          params: {
+            ojName: 'HDU'
+          }
+        })
+        .then(res => {
+          that.HduAccount = res.data
         })
     }
   }
