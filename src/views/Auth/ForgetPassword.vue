@@ -159,7 +159,7 @@
               })
               .then(res => {
                 if (res.data === true) {
-                   that.$Message.info('修改密码成功')
+                   that.$Message.success('修改密码成功')
                    router.push('Login')
                 } else {
                   that.$Message.error(res.data)

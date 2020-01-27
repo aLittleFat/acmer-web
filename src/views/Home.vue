@@ -25,7 +25,7 @@
             </Header>
             <Layout>
                 <Sider hide-trigger :style="{background: '#fff'}">
-                    <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']">
+                    <Menu theme="light" width="auto" :open-names="['1']">
                         <Submenu name="1">
                             <template slot="title">
                                 <Icon type="ios-navigate"></Icon>
@@ -38,10 +38,10 @@
                         <Submenu name="2">
                             <template slot="title">
                                 <Icon type="ios-keypad"></Icon>
-                                Item 2
+                                设置
                             </template>
-                            <MenuItem name="2-1">Option 1</MenuItem>
-                            <MenuItem name="2-2">Option 2</MenuItem>
+                            <MenuItem name="2-1" to="information">个人信息</MenuItem>
+                            <MenuItem name="2-2" to="ojaccount">OJ账号</MenuItem>
                         </Submenu>
                         <Submenu name="3">
                             <template slot="title">
@@ -53,7 +53,7 @@
                         </Submenu>
                     </Menu>
                 </Sider>
-                <Layout :style="{padding: '0 24px 24px'}">
+                <Layout :style="{padding: '24px 24px 24px'}">
                     <Content :style="{padding: '24px', minHeight: '480px', background: '#fff'}">
                         <router-view></router-view>
                     </Content>
@@ -76,13 +76,9 @@
         if (localStorage.userId) {
           this.userId = localStorage.userId
           this.$http
-            .get('/api/common/user/getUser', {
-              params: {
-                id: this.userId
-              }
-            })
+            .get('/api/common/user/getMyInfo')
             .then(res => {
-              this.userName = res.data.name
+              this.userName = res.data.user.name
             })
         }
       },

@@ -92,7 +92,7 @@
                     window.localStorage['userId'] = res.data
                     console.log(res.headers.token)
                     console.log(localStorage.token)
-                    that.$Message.info('登录成功')
+                    that.$Message.success('登录成功')
                     router.push('/')
                   } else {
                     that.$Message.error(res.data)

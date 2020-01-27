@@ -13,6 +13,16 @@ const routes = [
         path: 'registerverify',
         name: 'registerverify',
         component: () => import('@/views/Verify/RegisterVerify.vue')
+      },
+      {
+        path: 'information',
+        name: 'information',
+        component: () => import('@/views/Setting/Information.vue')
+      },
+      {
+        path: 'ojaccount',
+        name: 'ojaccount',
+        component: () => import('@/views/Setting/OjAccount.vue')
       }
     ]
   },
