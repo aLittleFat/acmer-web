@@ -47,6 +47,30 @@
         </Card>
       </Col>
     </Row>
+    <br>
+    <Row>
+      <Col span="8">
+        <Card>
+            <p slot="title">BZOJ</p>
+            <div v-if="BzojAccount===''">
+              <Button size="small" type="success" @click="handleShowAddOjAccountModal('BZOJ')">添加</Button>
+            </div>
+            <div v-else>
+              <Row>
+                <Col span="6">
+                  <a :href="handleGetAccountHref('https://www.lydsy.com/JudgeOnline/userinfo.php?user=', BzojAccount)" target="_blank">{{ BzojAccount }}</a>
+                </Col>
+                <Col offset="2" span="3">
+                  <Button size="small" type="warning" @click="handleShowChangeOjAccountModal('BZOJ')">修改</Button>
+                </Col>
+                <Col offset="1" span="3">
+                  <Button size="small" type="error" @click="confirmDelete('BZOJ')">删除</Button>
+                </Col>
+              </Row>
+            </div>
+        </Card>
+      </Col>
+    </Row>
     <Modal
       v-model="addOjAccountModal"
       :title="handleTitle">
@@ -103,7 +127,8 @@
         add_loading: false,
         change_loading: false,
         VjAccount: '',
-        HduAccount: ''
+        HduAccount: '',
+        BzojAccount: ''
       }
     },
     methods: {
@@ -211,6 +236,15 @@
         })
         .then(res => {
           that.HduAccount = res.data
+        })
+      that.$http
+        .get('/api/student/ojaccount/getMyOjAccount', {
+          params: {
+            ojName: 'BZOJ'
+          }
+        })
+        .then(res => {
+          that.BzojAccount = res.data
         })
     }
   }
