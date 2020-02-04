@@ -23,6 +23,11 @@ const routes = [
         path: 'ojaccount',
         name: 'ojaccount',
         component: () => import('@/views/Setting/OjAccount.vue')
+      },
+      {
+        path: 'myacrecord',
+        name: 'myacrecord',
+        component: () => import('@/views/Personal/MyAcRecord.vue')
       }
     ]
   },

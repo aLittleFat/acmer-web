@@ -139,7 +139,7 @@
         let that = this
         that.add_loading = true
         that.$http
-          .post('/api/student/ojaccount/addMyOjAccount', {
+          .post('/api/student/oJaccount/addMyOjAccount', {
             ojName: that.handleOjName,
             username: that.formItem.modalUsername,
             password: that.formItem.modalPassword
@@ -158,7 +158,7 @@
         let that = this
         that.change_loading = true
         that.$http
-          .post('/api/student/ojaccount/changeMyOjAccount', {
+          .post('/api/student/oJaccount/changeMyOjAccount', {
             ojName: that.handleOjName,
             username: that.formItem.modalUsername,
             password: that.formItem.modalPassword
@@ -176,7 +176,7 @@
       handleDeleteOjAccount () {
         let that = this
         that.$http
-          .post('/api/student/ojaccount/deleteMyOjAccount', {
+          .post('/api/student/oJaccount/deleteMyOjAccount', {
             ojName: that.handleOjName
           })
           .then(res => {
@@ -220,7 +220,7 @@
     created: function () {
       let that = this
       that.$http
-        .get('/api/student/ojaccount/getMyOjAccount', {
+        .get('/api/student/oJaccount/getMyOjAccount', {
           params: {
             ojName: 'VJ'
           }
@@ -229,7 +229,7 @@
           that.VjAccount = res.data
         })
       that.$http
-        .get('/api/student/ojaccount/getMyOjAccount', {
+        .get('/api/student/oJaccount/getMyOjAccount', {
           params: {
             ojName: 'HDU'
           }
@@ -238,7 +238,7 @@
           that.HduAccount = res.data
         })
       that.$http
-        .get('/api/student/ojaccount/getMyOjAccount', {
+        .get('/api/student/oJaccount/getMyOjAccount', {
           params: {
             ojName: 'BZOJ'
           }

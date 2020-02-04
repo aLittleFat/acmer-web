@@ -9,11 +9,6 @@ import './plugins/iview.js'
 import http from './http.js'
 Vue.prototype.$http = http
 
-// Vue.use(VueAxios,axios);
-
-// axios.defaults.baseURL = 'http://localhost:8080'
-// axios.defaults.withCredentials = true
-
 Vue.use(VueRouter)
 Vue.config.productionTip = false
 
