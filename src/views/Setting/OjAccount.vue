@@ -71,16 +71,48 @@
         </Card>
       </Col>
     </Row>
+    <br>
+    <Row>
+      <Col span="8">
+        <Card>
+            <p slot="title">CodeForces</p>
+            <div v-if="CfAccount===''">
+              <Button size="small" type="success" @click="handleShowAddOjAccountModal('CodeForces')">添加</Button>
+            </div>
+            <div v-else>
+              <Row>
+                <Col span="6">
+                  <a :href="handleGetAccountHref('https://www.codeforces.com/profile/', CfAccount)" target="_blank">{{ CfAccount }}</a>
+                </Col>
+                <Col offset="2" span="3">
+                  <Button size="small" type="warning" @click="handleShowChangeOjAccountModal('CodeForces')">修改</Button>
+                </Col>
+                <Col offset="1" span="3">
+                  <Button size="small" type="error" @click="confirmDelete('CodeForces')">删除</Button>
+                </Col>
+              </Row>
+            </div>
+        </Card>
+      </Col>
+    </Row>
     <Modal
-      v-model="addOjAccountModal"
-      :title="handleTitle">
+      v-model="addOjAccountModal">
+      <p slot="header" style="color:#f60;text-align:center">
+          <span>{{handleModalTitle}}</span>
+      </p>
       <Row>
         <Col span="15">
           <Form :model="formItem" :label-width="100" :rules="rule">
             <FormItem label="用户名" prop="username">
               <Input v-model="formItem.modalUsername" placeholder="请输入用户名"></Input>
             </FormItem>
-            <FormItem label="密码" prop="password">
+            <FormItem v-if="handleOjName==='CodeForces'" prop="verifyCode">
+              <Input type="text" v-model="formItem.modalPassword" placeholder="验证码">
+              <Icon type="ios-code" slot="prepend"></Icon>
+              <Button type="primary" @click="getCode()" v-model="getCodeButtonContent" :disabled="getCodeDisable" slot="append">{{getCodeButtonContent}}</Button>
+              </Input>
+            </FormItem>
+            <FormItem v-else label="密码" prop="password">
               <Input type="password" v-model="formItem.modalPassword" placeholder="请输入密码"></Input>
             </FormItem>
           </Form>
@@ -91,15 +123,23 @@
       </div>
     </Modal>
     <Modal
-      v-model="changeOjAccountModal"
-      :title="handleTitle">
+      v-model="changeOjAccountModal">
+      <p slot="header" style="color:#f60;text-align:center">
+          <span>{{handleModalTitle}}</span>
+      </p>
       <Row>
         <Col span="15">
           <Form :model="formItem" :label-width="100" :rules="rule">
             <FormItem label="用户名" prop="username">
               <Input v-model="formItem.modalUsername" placeholder="请输入用户名"></Input>
             </FormItem>
-            <FormItem label="密码" prop="password">
+            <FormItem v-if="handleOjName==='CodeForces'" prop="verifyCode">
+              <Input type="text" v-model="formItem.modalPassword" placeholder="验证码">
+              <Icon type="ios-code" slot="prepend"></Icon>
+              <Button type="primary" @click="getCode()" v-model="getCodeButtonContent" :disabled="getCodeDisable" slot="append">{{getCodeButtonContent}}</Button>
+              </Input>
+            </FormItem>
+            <FormItem v-else label="密码" prop="password">
               <Input type="password" v-model="formItem.modalPassword" placeholder="请输入密码"></Input>
             </FormItem>
           </Form>
@@ -128,7 +168,11 @@
         change_loading: false,
         VjAccount: '',
         HduAccount: '',
-        BzojAccount: ''
+        BzojAccount: '',
+        CfAccount: '',
+        getCodeButtonContent: '发送验证码',
+        getCodeDisable: false,
+        totalTime: 60
       }
     },
     methods: {
@@ -139,7 +183,7 @@
         let that = this
         that.add_loading = true
         that.$http
-          .post('/api/student/oJaccount/addMyOjAccount', {
+          .post('/api/student/ojAccount/addMyOjAccount', {
             ojName: that.handleOjName,
             username: that.formItem.modalUsername,
             password: that.formItem.modalPassword
@@ -158,7 +202,7 @@
         let that = this
         that.change_loading = true
         that.$http
-          .post('/api/student/oJaccount/changeMyOjAccount', {
+          .post('/api/student/ojAccount/changeMyOjAccount', {
             ojName: that.handleOjName,
             username: that.formItem.modalUsername,
             password: that.formItem.modalPassword
@@ -176,7 +220,7 @@
       handleDeleteOjAccount () {
         let that = this
         that.$http
-          .post('/api/student/oJaccount/deleteMyOjAccount', {
+          .post('/api/student/ojAccount/deleteMyOjAccount', {
             ojName: that.handleOjName
           })
           .then(res => {
@@ -215,12 +259,42 @@
               this.handleDeleteOjAccount()
           }
         })
+      },
+      getCode () {
+        let that = this
+        if (that.formItem.modalUsername === '') {
+          that.$Message.error('请输入CodeForces账号')
+        } else {
+          that.totalTime = 60
+          that.$http
+            .post('/api/student/ojAccount/sendCfVerifyCode', {
+              username: that.formItem.modalUsername
+            })
+            .then(res => {
+              if (res.data === true) {
+                that.getCodeButtonContent = that.totalTime + 's后重新发送'
+                that.getCodeDisable = true
+                  let clock = window.setInterval(() => {
+                    that.totalTime--
+                    that.getCodeButtonContent = that.totalTime + 's后重新发送'
+                    if (that.totalTime < 0) {
+                        window.clearInterval(clock)
+                        that.getCodeButtonContent = '重新发送验证码'
+                        that.totalTime = 60
+                        that.getCodeDisable = false
+                    }
+                  }, 1000)
+              } else {
+                that.$Message.error(res.data)
+              }
+            })
+        }
       }
     },
     created: function () {
       let that = this
       that.$http
-        .get('/api/student/oJaccount/getMyOjAccount', {
+        .get('/api/student/ojAccount/getMyOjAccount', {
           params: {
             ojName: 'VJ'
           }
@@ -229,7 +303,7 @@
           that.VjAccount = res.data
         })
       that.$http
-        .get('/api/student/oJaccount/getMyOjAccount', {
+        .get('/api/student/ojAccount/getMyOjAccount', {
           params: {
             ojName: 'HDU'
           }
@@ -238,13 +312,22 @@
           that.HduAccount = res.data
         })
       that.$http
-        .get('/api/student/oJaccount/getMyOjAccount', {
+        .get('/api/student/ojAccount/getMyOjAccount', {
           params: {
             ojName: 'BZOJ'
           }
         })
         .then(res => {
           that.BzojAccount = res.data
+        })
+      that.$http
+        .get('/api/student/ojAccount/getMyOjAccount', {
+          params: {
+            ojName: 'CodeForces'
+          }
+        })
+        .then(res => {
+          that.CfAccount = res.data
         })
     }
   }

@@ -24,6 +24,7 @@
       </template>
     </Table>
   </div>
+  <br>
   <div>
     <Page ref="page" :total="totalNum" :pageSize="pageSize" @on-change="handleGetUsers()" @on-page-size-change="handleGetUsers()" />
   </div>

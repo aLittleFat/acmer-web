@@ -11,23 +11,28 @@ const routes = [
     'children': [
       {
         path: 'registerverify',
-        name: 'registerverify',
+        name: 'RegisterVerify',
         component: () => import('@/views/Verify/RegisterVerify.vue')
       },
       {
         path: 'information',
-        name: 'information',
+        name: 'Information',
         component: () => import('@/views/Setting/Information.vue')
       },
       {
         path: 'ojaccount',
-        name: 'ojaccount',
+        name: 'OjAccount',
         component: () => import('@/views/Setting/OjAccount.vue')
       },
       {
         path: 'myacrecord',
-        name: 'myacrecord',
+        name: 'MyAcRecord',
         component: () => import('@/views/Personal/MyAcRecord.vue')
+      },
+      {
+        path: 'personalacrank',
+        name: 'personalAcRank',
+        component: () => import('@/views/Rank/PersonalAcRank.vue')
       }
     ]
   },

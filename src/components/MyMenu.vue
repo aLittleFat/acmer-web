@@ -25,9 +25,9 @@
       <Submenu name="4">
           <template slot="title">
               <Icon type="ios-analytics"></Icon>
-              Item 3
+              排行榜
           </template>
-          <MenuItem>Option 1</MenuItem>
+          <MenuItem to="personalacrank">个人刷题榜</MenuItem>
           <MenuItem>Option 2</MenuItem>
       </Submenu>
   </Menu>

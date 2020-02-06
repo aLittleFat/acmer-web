@@ -79,7 +79,7 @@
           .get('api/student/acProblem/getMyAcProblems', {
             params: {
               time: that.queryTime.getTime(),
-              days: 8
+              days: 10
             }
           })
           .then(res => {
