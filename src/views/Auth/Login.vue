@@ -87,15 +87,12 @@
                 password: that.formInline.password
               })
               .then(res => {
-                  if (/^\d+$/.test(res.data)) {
+                  if (res.data.status === 0) {
                     window.localStorage['token'] = res.headers.token
-                    window.localStorage['userId'] = res.data
-                    console.log(res.headers.token)
-                    console.log(localStorage.token)
                     that.$Message.success('登录成功')
                     router.push('/')
                   } else {
-                    that.$Message.error(res.data)
+                    that.$Message.error(res.data.msg)
                   }
               })
             .catch(function (error) {

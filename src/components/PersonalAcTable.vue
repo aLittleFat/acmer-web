@@ -54,7 +54,6 @@
       }
     },
     created: function () {
-      // console.log(this.grade)
       let that = this
       that.$http
         .get('/api/unauth/acProblem/getPersonalProblemAcRank', {
@@ -64,8 +63,12 @@
           }
         })
         .then(res => {
-          that.personalAcList = res.data
-          that.tableLoading = false
+          if (res.data.status === 0) {
+            that.personalAcList = res.data.data
+            that.tableLoading = false
+          } else {
+            that.$Message.error(res.data.msg)
+          }
         })
     }
   }

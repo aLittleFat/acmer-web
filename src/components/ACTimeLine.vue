@@ -60,8 +60,12 @@
                 }
               })
               .then(res => {
-                for (let i = 0; i < res.data.length; ++i) {
-                  that.acList.push(res.data[i])
+                if (res.data.status === 0) {
+                  for (let i = 0; i < res.data.data.length; ++i) {
+                    that.acList.push(res.data.data[i])
+                  }
+                } else {
+                  that.$Message.error(res.data.msg)
                 }
                 resolve()
               })
@@ -83,8 +87,12 @@
             }
           })
           .then(res => {
-            that.acList = res.data
-            that.loading = false
+            if (res.data.status === 0) {
+              that.acList = res.data.data
+              that.loading = false
+            } else {
+              that.$Message.error(res.data.msg)
+            }
           })
       }
     }

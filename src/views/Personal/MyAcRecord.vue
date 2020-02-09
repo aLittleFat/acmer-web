@@ -19,7 +19,11 @@
       that.$http
         .get('api/common/user/getMyInfo')
         .then(res => {
-          that.studentId = res.data.student.id
+          if (res.data.status === 0) {
+            that.studentId = res.data.data.student.id
+          } else {
+            that.$Message.error(res.data.msg)
+          }
         })
     }
   }

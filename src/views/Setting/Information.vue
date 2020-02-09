@@ -106,16 +106,13 @@
                 icpcEmail: that.formItem.icpcEmail
               })
               .then(res => {
-                if (res.data === true) {
+                if (res.data.status === 0) {
                    that.$Message.success('修改成功')
                    that.$router.go(0)
                 } else {
-                  that.$Message.error(res.data)
+                  that.$Message.error(res.data.msg)
                 }
               })
-            .catch(function (error) {
-              that.$Message.error(error.data)
-            })
           } else {
             that.$Message.error('请正确输入表单!')
           }
@@ -127,7 +124,11 @@
       that.$http
         .get('/api/common/user/getMyInfo')
         .then(res => {
-          that.user = res.data
+          if (res.data.status === 0) {
+            that.user = res.data.data
+          } else {
+            that.$Message.error(res.data.msg)
+          }
         })
     }
   }

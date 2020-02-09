@@ -204,7 +204,7 @@
             email: that.formInline.email
           })
           .then(res => {
-            if (res.data === true) {
+            if (res.data.status === 0) {
               that.getCodeButtonContent = that.totalTime + 's后重新发送'
               that.getCodeDisable = true
                 let clock = window.setInterval(() => {
@@ -218,12 +218,8 @@
                   }
                 }, 1000)
             } else {
-              that.$Message.error(res.data)
+              that.$Message.error(res.data.msg)
             }
-          })
-          .catch(error => {
-            console.log(error)
-            that.$Message.error('网络错误')
           })
         }
       },
@@ -243,16 +239,13 @@
                 type: that.formInline.role
               })
               .then(res => {
-                if (res.data === true) {
+                if (res.data.status === 0) {
                    that.$Message.success('注册成功，请等到管理员审核')
                    router.push('Login')
                 } else {
-                  that.$Message.error(res.data)
+                  that.$Message.error(res.data.status)
                 }
               })
-            .catch(function (error) { // 请求失败处理
-              that.$Message.error(error.data)
-            })
           } else {
             that.$Message.error('请正确输入表单!')
           }

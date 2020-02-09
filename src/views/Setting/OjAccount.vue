@@ -190,11 +190,12 @@
           })
           .then(res => {
             that.add_loading = false
-            if (res.data === true) {
+            if (res.data.status === 0) {
               that.$Message.success('添加成功')
-              setTimeout(function () { that.$router.go(0) }, 1000)
+              that.handleGetOjAccount()
+              that.addOjAccountModal = false
             } else {
-              that.$Message.error(res.data)
+              that.$Message.error(res.data.msg)
             }
           })
       },
@@ -209,11 +210,12 @@
           })
           .then(res => {
             that.change_loading = false
-            if (res.data === true) {
+            if (res.data.status === 0) {
               that.$Message.success('修改成功')
-              setTimeout(function () { that.$router.go(0) }, 1000)
+              that.handleGetOjAccount()
+              that.changeOjAccountModal = false
             } else {
-              that.$Message.error(res.data)
+              that.$Message.error(res.data.msg)
             }
           })
       },
@@ -224,11 +226,11 @@
             ojName: that.handleOjName
           })
           .then(res => {
-            if (res.data === true) {
+            if (res.data.status === 0) {
               that.$Message.success('删除成功')
-              setTimeout(function () { that.$router.go(0) }, 1000)
+              that.handleGetOjAccount()
             } else {
-              that.$Message.error(res.data)
+              that.$Message.error(res.data.msg)
             }
           })
       },
@@ -271,7 +273,7 @@
               username: that.formItem.modalUsername
             })
             .then(res => {
-              if (res.data === true) {
+              if (res.data.status === 0) {
                 that.getCodeButtonContent = that.totalTime + 's后重新发送'
                 that.getCodeDisable = true
                   let clock = window.setInterval(() => {
@@ -285,50 +287,103 @@
                     }
                   }, 1000)
               } else {
-                that.$Message.error(res.data)
+                that.$Message.error(res.data.msg)
               }
             })
+        }
+      },
+      getVjAccount () {
+        let that = this
+        that.$http
+          .get('/api/student/ojAccount/getMyOjAccount', {
+            params: {
+              ojName: 'VJ'
+            }
+          })
+          .then(res => {
+            if (res.data.status === 0) {
+              that.VjAccount = res.data.data
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      getHduAccount () {
+        let that = this
+        that.$http
+          .get('/api/student/ojAccount/getMyOjAccount', {
+            params: {
+              ojName: 'HDU'
+            }
+          })
+          .then(res => {
+            if (res.data.status === 0) {
+              that.HduAccount = res.data.data
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      getBzojAccount () {
+        let that = this
+        that.$http
+          .get('/api/student/ojAccount/getMyOjAccount', {
+            params: {
+              ojName: 'BZOJ'
+            }
+          })
+          .then(res => {
+            if (res.data.status === 0) {
+              that.BzojAccount = res.data.data
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      getCfAccount () {
+        let that = this
+        that.$http
+          .get('/api/student/ojAccount/getMyOjAccount', {
+            params: {
+              ojName: 'CodeForces'
+            }
+          })
+          .then(res => {
+            if (res.data.status === 0) {
+              that.CfAccount = res.data.data
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      handleGetOjAccount () {
+        let that = this
+        switch (that.handleOjName) {
+          case 'VJ': {
+            that.getVjAccount()
+            break
+          }
+          case 'HDU': {
+            that.getHduAccount()
+            break
+          }
+          case 'BZOJ': {
+            that.getBzojAccount()
+            break
+          }
+          case 'CodeForces': {
+            that.getCfAccount()
+            break
+          }
         }
       }
     },
     created: function () {
       let that = this
-      that.$http
-        .get('/api/student/ojAccount/getMyOjAccount', {
-          params: {
-            ojName: 'VJ'
-          }
-        })
-        .then(res => {
-          that.VjAccount = res.data
-        })
-      that.$http
-        .get('/api/student/ojAccount/getMyOjAccount', {
-          params: {
-            ojName: 'HDU'
-          }
-        })
-        .then(res => {
-          that.HduAccount = res.data
-        })
-      that.$http
-        .get('/api/student/ojAccount/getMyOjAccount', {
-          params: {
-            ojName: 'BZOJ'
-          }
-        })
-        .then(res => {
-          that.BzojAccount = res.data
-        })
-      that.$http
-        .get('/api/student/ojAccount/getMyOjAccount', {
-          params: {
-            ojName: 'CodeForces'
-          }
-        })
-        .then(res => {
-          that.CfAccount = res.data
-        })
+      that.getVjAccount()
+      that.getHduAccount()
+      that.getBzojAccount()
+      that.getCfAccount()
     }
   }
 </script>
