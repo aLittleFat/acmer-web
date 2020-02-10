@@ -33,6 +33,11 @@ const routes = [
         path: 'personalacrank',
         name: 'personalAcRank',
         component: () => import('@/views/Rank/PersonalAcRank.vue')
+      },
+      {
+        path: 'mycontest',
+        name: 'myContest',
+        component: () => import('@/views/Personal/MyContest.vue')
       }
     ]
   },

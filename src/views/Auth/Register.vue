@@ -243,7 +243,7 @@
                    that.$Message.success('注册成功，请等到管理员审核')
                    router.push('Login')
                 } else {
-                  that.$Message.error(res.data.status)
+                  that.$Message.error(res.data.msg)
                 }
               })
           } else {

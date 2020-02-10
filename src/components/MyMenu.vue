@@ -13,6 +13,7 @@
               个人
           </template>
           <MenuItem to="myacrecord">刷题记录</MenuItem>
+          <MenuItem to="mycontest">比赛记录</MenuItem>
       </Submenu>
       <Submenu name="3">
           <template slot="title">

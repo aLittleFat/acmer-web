@@ -1,9 +1,9 @@
 <template>
-  <ACTimeLine :showStudentId="studentId" :myStudentId="studentId"/>
+  <PersonalContestTable :studentId="studentId" />
 </template>
 
 <script>
-  import ACTimeLine from '@/components/ACTimeLine.vue'
+  import PersonalContestTable from '@/components/PersonalContestTable.vue'
   export default {
     data () {
       return {
@@ -11,7 +11,7 @@
       }
     },
     components: {
-      ACTimeLine
+      PersonalContestTable
     },
     created: function () {
       let that = this

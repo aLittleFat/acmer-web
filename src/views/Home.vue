@@ -6,7 +6,7 @@
                     <div class="layout-logo"></div>
                     <div class="layout-nav">
                       <Row type="flex" justify="end" class="code-row-bg">
-                        <div v-if="userId === 0">
+                        <div v-if="userName === ''">
                           <MenuItem name="1" to="/auth/login">
                               <Icon type="ios-analytics"></Icon>
                               登录
@@ -50,13 +50,12 @@
     components: {
       MyMenu
     },
-    mounted () {
-      if (localStorage.userId) {
-        this.userId = localStorage.userId
+    created: function () {
+      if (localStorage.token) {
         this.$http
           .get('/api/common/user/getMyInfo')
           .then(res => {
-            this.userName = res.data.user.name
+            this.userName = res.data.data.user.name
           })
       }
     },
@@ -67,7 +66,6 @@
           .get('/auth/logout')
           .then(res => {
             localStorage.removeItem('token')
-            localStorage.removeItem('userId')
             that.$Message.info('注销成功')
             that.$router.push('/auth/login')
           })
