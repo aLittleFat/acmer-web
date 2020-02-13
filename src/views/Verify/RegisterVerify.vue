@@ -66,7 +66,7 @@
     created () {
       let that = this
       that.$http
-        .get('/api/admin/verify/getUserUnverify', {
+        .get('/api/user_unVerify', {
           params: {
             page: 1,
             size: that.pageSize
@@ -83,7 +83,7 @@
         let that = this
         that.tableLoading = true
         that.$http
-          .post('/api/admin/verify/registerVerify', {
+          .put('/api/registerVerify', {
             id: that.users[index].user.id
           })
           .then(res => {
@@ -96,8 +96,10 @@
         let that = this
         that.tableLoading = true
         that.$http
-          .post('/api/admin/verify/deleteAccount', {
-            id: that.users[index].user.id
+          .delete('/api/user', {
+            params: {
+              id: that.users[index].user.id
+            }
           })
           .then(res => {
             that.remove(index)

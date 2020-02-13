@@ -1,19 +1,19 @@
 <template>
   <Table :loading="tableLoading" stripe :columns="columns" :data="personalAcList">
     <template slot-scope="{ row, index }" slot="rank">
-        {{ index+1 }}
+      {{ index+1 }}
     </template>
     <template slot-scope="{ row }" slot="grade">
-        {{ row.student.grade }}
+      {{ row.student.grade }}
     </template>
     <template slot-scope="{ row }" slot="name">
-        {{ row.user.name }}
+      <router-link :to="{name:'Student',params:{id: row.student.id}}">{{ row.user.name }}</router-link>
     </template>
     <template slot-scope="{ row }" slot="acNum">
-        {{ row.acNum }}
+      {{ row.acNum }}
     </template>
     <template slot-scope="{ row }" slot="awards">
-        {{ row.awards }}
+      {{ row.awards }}
     </template>
   </Table>
 </template>
@@ -56,7 +56,7 @@
     created: function () {
       let that = this
       that.$http
-        .get('/api/unauth/acProblem/getPersonalProblemAcRank', {
+        .get('/api/personalProblemAcRank', {
           params: {
             grade: that.grade,
             includeRetired: that.includeRetired

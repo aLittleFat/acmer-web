@@ -1,5 +1,5 @@
 <template>
-  <PersonalContestTable :studentId="studentId" />
+  <PersonalContestTable studentId="" :height="750" />
 </template>
 
 <script>
@@ -12,18 +12,6 @@
     },
     components: {
       PersonalContestTable
-    },
-    created: function () {
-      let that = this
-      that.$http
-        .get('api/common/user/getMyInfo')
-        .then(res => {
-          if (res.data.status === 0) {
-            that.studentId = res.data.data.student.id
-          } else {
-            that.$Message.error(res.data.msg)
-          }
-        })
     }
   }
 </script>

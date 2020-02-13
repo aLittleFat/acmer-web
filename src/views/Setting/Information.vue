@@ -101,14 +101,15 @@
         that.$refs[name].validate((valid) => {
           if (valid) {
             that.$http
-              .post('/api/common/user/changeMyInfo', {
+              .put('/api/info', {
                 phone: that.formItem.phone,
                 icpcEmail: that.formItem.icpcEmail
               })
               .then(res => {
                 if (res.data.status === 0) {
                    that.$Message.success('修改成功')
-                   that.$router.go(0)
+                   that.getInfo()
+                   that.changing = false
                 } else {
                   that.$Message.error(res.data.msg)
                 }
@@ -117,19 +118,22 @@
             that.$Message.error('请正确输入表单!')
           }
         })
+      },
+      getInfo () {
+        let that = this
+        that.$http
+          .get('/api/info')
+          .then(res => {
+            if (res.data.status === 0) {
+              that.user = res.data.data
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
       }
     },
     created: function () {
-      let that = this
-      that.$http
-        .get('/api/common/user/getMyInfo')
-        .then(res => {
-          if (res.data.status === 0) {
-            that.user = res.data.data
-          } else {
-            that.$Message.error(res.data.msg)
-          }
-        })
+      this.getInfo()
     }
   }
 </script>

@@ -11,7 +11,7 @@
     }
 </style>
 <template>
-  <Scroll :on-reach-bottom="handleReachBottom" :height="700">
+  <Scroll :on-reach-bottom="handleReachBottom" :height="height">
     <Row>
       <Col span="20">
           <Timeline>
@@ -21,7 +21,7 @@
             </TimelineItem>
           </Timeline>
       </Col>
-      <Col v-if="myStudentId!==showStudentId">
+      <Col v-if="studentId !== ''">
         <Checkbox v-model="notShowMy">不显示我AC的</Checkbox>
       </Col>
     </Row>
@@ -35,8 +35,8 @@
     export default {
       name: 'ACTimeLine',
       props: {
-        showStudentId: String,
-        myStudentId: String
+        studentId: String,
+        height: Number
       },
       data () {
         return {
@@ -52,13 +52,14 @@
             let that = this
             that.queryTime = new Date(that.acList[that.acList.length - 1].time)
             that.queryTime.setHours(0)
+            var url = ''
+            if (that.studentId === '') {
+              url = '/api/acProblems?time=' + that.queryTime.getTime() + '&days=5'
+            } else {
+              url = '/api/acProblems/' + that.studentId + '?except=' + that.notShowMy + '&time=' + that.queryTime.getTime() + '&days=5'
+            }
             that.$http
-              .get('api/student/acProblem/getMyAcProblems', {
-                params: {
-                  time: that.queryTime.getTime(),
-                  days: 5
-                }
-              })
+              .get(url)
               .then(res => {
                 if (res.data.status === 0) {
                   for (let i = 0; i < res.data.data.length; ++i) {
@@ -70,30 +71,42 @@
                 resolve()
               })
           })
+        },
+        getData () {
+          let that = this
+          that.loading = true
+          that.queryTime = new Date()
+          that.queryTime.setHours(0)
+          that.queryTime.setMinutes(0)
+          that.queryTime.setSeconds(0)
+          var url = ''
+          if (that.studentId === '') {
+            url = '/api/acProblems?time=' + that.queryTime.getTime() + '&days=10'
+          } else {
+            url = '/api/acProblems/' + that.studentId + '?except=' + that.notShowMy + '&time=' + that.queryTime.getTime() + '&days=10'
+          }
+          that.$http
+            .get(url)
+            .then(res => {
+              if (res.data.status === 0) {
+                that.acList = res.data.data
+                that.loading = false
+              } else {
+                that.$Message.error(res.data.msg)
+              }
+            })
         }
       },
       created: function () {
-        let that = this
-        that.loading = true
-        that.queryTime = new Date()
-        that.queryTime.setHours(0)
-        that.queryTime.setMinutes(0)
-        that.queryTime.setSeconds(0)
-        that.$http
-          .get('api/student/acProblem/getMyAcProblems', {
-            params: {
-              time: that.queryTime.getTime(),
-              days: 10
-            }
-          })
-          .then(res => {
-            if (res.data.status === 0) {
-              that.acList = res.data.data
-              that.loading = false
-            } else {
-              that.$Message.error(res.data.msg)
-            }
-          })
+        this.getData()
+      },
+      watch: {
+        studentId: function () {
+          this.getData()
+        },
+        notShowMy: function () {
+          this.getData()
+        }
       }
     }
 </script>

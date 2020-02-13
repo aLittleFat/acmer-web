@@ -1,24 +1,10 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <!-- <div>
-      <p>
-        If ViewUI is successfully added to this project, you'll see an
-        <code v-text="'<Button>'"></code>
-        below
-      </p>
-      <Button type="primary">Button</Button>
-     </div> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-
-     <!-- <Login></Login> -->
      <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-// import Login from './components/Login.vue'
 export default {
   name: 'app'
 }

@@ -9,7 +9,7 @@ axios.defaults.timeout = 30000
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    if (config.method === 'post') {
+    if (config.method === 'post' || config.method === 'put') {
       config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
       config.data = qs.stringify(config.data)
     }

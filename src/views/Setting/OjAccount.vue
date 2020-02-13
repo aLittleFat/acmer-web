@@ -183,7 +183,7 @@
         let that = this
         that.add_loading = true
         that.$http
-          .post('/api/student/ojAccount/addMyOjAccount', {
+          .post('/api/ojAccount', {
             ojName: that.handleOjName,
             username: that.formItem.modalUsername,
             password: that.formItem.modalPassword
@@ -203,7 +203,7 @@
         let that = this
         that.change_loading = true
         that.$http
-          .post('/api/student/ojAccount/changeMyOjAccount', {
+          .put('/api/ojAccount', {
             ojName: that.handleOjName,
             username: that.formItem.modalUsername,
             password: that.formItem.modalPassword
@@ -222,8 +222,10 @@
       handleDeleteOjAccount () {
         let that = this
         that.$http
-          .post('/api/student/ojAccount/deleteMyOjAccount', {
-            ojName: that.handleOjName
+          .delete('/api/ojAccount', {
+            params: {
+              ojName: that.handleOjName
+            }
           })
           .then(res => {
             if (res.data.status === 0) {
@@ -269,7 +271,7 @@
         } else {
           that.totalTime = 60
           that.$http
-            .post('/api/student/ojAccount/sendCfVerifyCode', {
+            .post('/api/cfVerifyCode', {
               username: that.formItem.modalUsername
             })
             .then(res => {
@@ -295,7 +297,7 @@
       getVjAccount () {
         let that = this
         that.$http
-          .get('/api/student/ojAccount/getMyOjAccount', {
+          .get('/api/ojAccount', {
             params: {
               ojName: 'VJ'
             }
@@ -311,7 +313,7 @@
       getHduAccount () {
         let that = this
         that.$http
-          .get('/api/student/ojAccount/getMyOjAccount', {
+          .get('/api/ojAccount', {
             params: {
               ojName: 'HDU'
             }
@@ -327,7 +329,7 @@
       getBzojAccount () {
         let that = this
         that.$http
-          .get('/api/student/ojAccount/getMyOjAccount', {
+          .get('/api/ojAccount', {
             params: {
               ojName: 'BZOJ'
             }
@@ -343,7 +345,7 @@
       getCfAccount () {
         let that = this
         that.$http
-          .get('/api/student/ojAccount/getMyOjAccount', {
+          .get('/api/ojAccount', {
             params: {
               ojName: 'CodeForces'
             }

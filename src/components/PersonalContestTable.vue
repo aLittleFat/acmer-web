@@ -1,7 +1,7 @@
 <template>
-  <Table :loading="tableLoading" :columns="columns" :data="personalContestList">
+  <Table :loading="tableLoading" :height="height" :columns="columns" :data="personalContestList">
     <template slot-scope="{ row }" slot="title">
-        {{ row.contest.name }}
+        {{ row.title }}
     </template>
     <template slot-scope="{ row }" slot="solved">
         {{ row.solved }}
@@ -10,7 +10,7 @@
         {{ row.penalty }}
     </template>
     <template slot-scope="{ row }" slot="solution">
-        {{ row.personalContestRecord.solution }}
+        {{ row.solution }}
     </template>
   </Table>
 </template>
@@ -19,26 +19,35 @@
   export default {
     name: 'PersonalContestTable',
     props: {
-      studentId: String
+      studentId: String,
+      height: Number
     },
     data () {
       return {
         columns: [
           {
             title: '比赛名称',
-            slot: 'title'
+            slot: 'title',
+            fixed: 'left',
+            width: 300
           },
           {
             title: 'Solved',
-            slot: 'solved'
+            key: 'solved',
+            fixed: 'left',
+            width: 90
           },
           {
             title: '罚时',
-            slot: 'penalty'
+            key: 'penalty',
+            fixed: 'left',
+            width: 90
           },
           {
             title: '题解',
-            slot: 'solution'
+            slot: 'solution',
+            fixed: 'left',
+            width: 80
           }
         ],
         personalContestList: [],
@@ -49,50 +58,67 @@
       }
     },
     created: function () {
-      let that = this
-      that.$http
-        .get('/api/student/contest/getMyContest')
-        .then(res => {
-          if (res.data.status === 0) {
-            that.personalContestList = res.data.data
-            for (var i = 0; i < that.personalContestList.length; ++i) {
-              if (that.problemNum < that.personalContestList[i].contest.problemNumber) {
-                that.problemNum = that.personalContestList[i].contest.problemNumber
-              }
-            }
-            for (i = 0; i < that.problemNum; ++i) {
-              var ch = String.fromCharCode(65 + i)
-              that.chars.push(ch)
-              that.columns.push({
-                'title': ch,
-                'key': ch,
-                'align': 'center'
-              })
-            }
-            for (i = 0; i < that.personalContestList.length; ++i) {
-              that.personalContestList[i].cellClassName = Object()
-              for (var j = 0; j < that.personalContestList[i].personalContestProblemRecords.length; ++j) {
-                if (that.personalContestList[i].personalContestProblemRecords[j].status === 'Solved') {
-                  that.personalContestList[i].cellClassName[that.chars[j]] = 'table-ac-cell'
-                  that.personalContestList[i][that.chars[j]] = that.personalContestList[i].personalContestProblemRecords[j].acTime + '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
-                } else if (that.personalContestList[i].personalContestProblemRecords[j].status === 'UpSolved') {
-                  that.personalContestList[i][that.chars[j]] = that.personalContestList[i].personalContestProblemRecords[j].acTime + '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
-                  that.personalContestList[i].cellClassName[that.chars[j]] = 'table-up-cell'
-                } else if (that.personalContestList[i].personalContestProblemRecords[j].tries > 0) {
-                  that.personalContestList[i][that.chars[j]] = '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
-                  that.personalContestList[i].cellClassName[that.chars[j]] = 'table-wa-cell'
-                } else {
-                  that.personalContestList[i][that.chars[j]] = ''
-                  that.personalContestList[i].cellClassName[that.chars[j]] = ''
+      this.getData()
+    },
+    methods: {
+      getData () {
+        let that = this
+        that.tableLoading = true
+        var url = ''
+        if (that.studentId === '') {
+          url = '/api/personalContest'
+        } else {
+          url = '/api/personalContest/' + that.studentId
+        }
+        that.$http
+          .get(url)
+          .then(res => {
+            if (res.data.status === 0) {
+              that.personalContestList = res.data.data
+              for (var i = 0; i < that.personalContestList.length; ++i) {
+                if (that.problemNum < that.personalContestList[i].proNum) {
+                  that.problemNum = that.personalContestList[i].proNum
                 }
               }
+              for (i = 0; i < that.problemNum; ++i) {
+                var ch = String.fromCharCode(65 + i)
+                that.chars.push(ch)
+                that.columns.push({
+                  'title': ch,
+                  'key': ch,
+                  'align': 'center',
+                  width: 100
+                })
+              }
+              for (i = 0; i < that.personalContestList.length; ++i) {
+                that.personalContestList[i].cellClassName = Object()
+                for (var j = 0; j < that.personalContestList[i].personalContestProblemRecords.length; ++j) {
+                  if (that.personalContestList[i].personalContestProblemRecords[j].status === 'Solved') {
+                    that.personalContestList[i].cellClassName[that.chars[j]] = 'table-ac-cell'
+                    that.personalContestList[i][that.chars[j]] = that.personalContestList[i].personalContestProblemRecords[j].acTime + '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
+                  } else if (that.personalContestList[i].personalContestProblemRecords[j].status === 'UpSolved') {
+                    that.personalContestList[i][that.chars[j]] = that.personalContestList[i].personalContestProblemRecords[j].acTime + '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
+                    that.personalContestList[i].cellClassName[that.chars[j]] = 'table-up-cell'
+                  } else if (that.personalContestList[i].personalContestProblemRecords[j].tries > 0) {
+                    that.personalContestList[i][that.chars[j]] = '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
+                    that.personalContestList[i].cellClassName[that.chars[j]] = 'table-wa-cell'
+                  } else {
+                    that.personalContestList[i][that.chars[j]] = ''
+                    that.personalContestList[i].cellClassName[that.chars[j]] = ''
+                  }
+                }
+              }
+              that.tableLoading = false
+            } else {
+              that.$Message.error(res.data.msg)
             }
-
-            that.tableLoading = false
-          } else {
-            that.$Message.error(res.data.msg)
-          }
-        })
+          })
+      }
+    },
+    watch: {
+      studentId: function () {
+        this.getData()
+      }
     }
   }
 </script>

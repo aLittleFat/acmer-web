@@ -1,5 +1,5 @@
 <template>
-  <ACTimeLine :showStudentId="studentId" :myStudentId="studentId"/>
+  <ACTimeLine studentId="" :height="750"/>
 </template>
 
 <script>
@@ -7,23 +7,10 @@
   export default {
     data () {
       return {
-        studentId: ''
       }
     },
     components: {
       ACTimeLine
-    },
-    created: function () {
-      let that = this
-      that.$http
-        .get('api/common/user/getMyInfo')
-        .then(res => {
-          if (res.data.status === 0) {
-            that.studentId = res.data.data.student.id
-          } else {
-            that.$Message.error(res.data.msg)
-          }
-        })
     }
   }
 </script>
