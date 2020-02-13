@@ -109,11 +109,16 @@ const routes = [
       {
         path: 'login',
         name: 'Login',
+        alias: [
+          '/login',
+          ''
+        ],
         component: () => import('@/views/Auth/Login.vue')
       },
       {
         path: 'register',
         name: 'Register',
+        alias: '/register',
         component: () => import('@/views/Auth/Register.vue')
       },
       {

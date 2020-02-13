@@ -7,7 +7,7 @@
                     <div class="layout-nav">
                       <Row type="flex" justify="end" class="code-row-bg">
                         <div v-if="userName === ''">
-                          <MenuItem name="1" to="/auth/login">
+                          <MenuItem name="1" :to="{name:'Login'}">
                               <Icon type="ios-analytics"></Icon>
                               登录
                           </MenuItem>
@@ -53,7 +53,7 @@
     created: function () {
       if (localStorage.token) {
         this.$http
-          .get('/api/common/user/getMyInfo')
+          .get('/api/info')
           .then(res => {
             this.userName = res.data.data.user.name
           })
@@ -67,7 +67,7 @@
           .then(res => {
             localStorage.removeItem('token')
             that.$Message.info('注销成功')
-            that.$router.push('/auth/login')
+            that.$router.push('/login')
           })
       }
     }

@@ -104,7 +104,9 @@
         })
       },
       register () {
-        router.push('register')
+        router.push({
+          name: 'Register'
+        })
       }
     }
   }
