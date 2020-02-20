@@ -135,7 +135,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path.toLowerCase().startsWith('/auth')) {
+  if (to.name === 'Login' || to.name === 'Register') {
     if (localStorage.token) {
       next({
         path: ''

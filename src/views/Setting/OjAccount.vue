@@ -1,100 +1,52 @@
 <template>
   <div>
-    <Row>
-      <Col span="8">
-        <Card>
-            <p slot="title">VJ</p>
-            <div v-if="VjAccount===''">
-              <Button size="small" type="success" @click="handleShowAddOjAccountModal('VJ')">添加</Button>
-            </div>
-            <div v-else>
-              <Row>
-                <Col span="6">
-                  <a :href="handleGetAccountHref('https://vjudge.net/user/', VjAccount)" target="_blank">{{ VjAccount }}</a>
-                </Col>
-                <Col offset="2" span="3">
-                  <Button size="small" type="warning" @click="handleShowChangeOjAccountModal('VJ')">修改</Button>
-                </Col>
-                <Col offset="1" span="3">
-                  <Button size="small" type="error" @click="confirmDelete('VJ')">删除</Button>
-                </Col>
-              </Row>
-            </div>
-        </Card>
-      </Col>
-    </Row>
+    <Card style="width: 30rem;">
+        <p slot="title">VJ</p>
+        <div v-if="VjAccount===''">
+          <Button size="small" type="success" @click="handleShowAddOjAccountModal('VJ')">添加</Button>
+        </div>
+        <div v-else>
+          <a :href="handleGetAccountHref('https://vjudge.net/user/', VjAccount)" target="_blank">{{ VjAccount }}</a>
+          <Button size="small" type="warning" style="margin-left: 2rem;" @click="handleShowChangeOjAccountModal('VJ')">修改</Button>
+          <Button size="small" type="error" style="margin-left: 2rem;" @click="confirmDelete('VJ')">删除</Button>
+        </div>
+    </Card>
     <br>
-    <Row>
-      <Col span="8">
-        <Card>
-            <p slot="title">HDU</p>
-            <div v-if="HduAccount===''">
-              <Button size="small" type="success" @click="handleShowAddOjAccountModal('HDU')">添加</Button>
-            </div>
-            <div v-else>
-              <Row>
-                <Col span="6">
-                  <a :href="handleGetAccountHref('http://acm.hdu.edu.cn/userstatus.php?user=', HduAccount)" target="_blank">{{ HduAccount }}</a>
-                </Col>
-                <Col offset="2" span="3">
-                  <Button size="small" type="warning" @click="handleShowChangeOjAccountModal('HDU')">修改</Button>
-                </Col>
-                <Col offset="1" span="3">
-                  <Button size="small" type="error" @click="confirmDelete('HDU')">删除</Button>
-                </Col>
-              </Row>
-            </div>
-        </Card>
-      </Col>
-    </Row>
+    <Card style="width: 30rem;">
+      <p slot="title">HDU</p>
+      <div v-if="HduAccount===''">
+        <Button size="small" type="success" @click="handleShowAddOjAccountModal('HDU')">添加</Button>
+      </div>
+      <div v-else>
+        <a :href="handleGetAccountHref('http://acm.hdu.edu.cn/userstatus.php?user=', HduAccount)" target="_blank">{{ HduAccount }}</a>
+        <Button size="small" type="warning" style="margin-left: 2rem;" @click="handleShowChangeOjAccountModal('HDU')">修改</Button>
+        <Button size="small" type="error" style="margin-left: 2rem;" @click="confirmDelete('HDU')">删除</Button>
+      </div>
+    </Card>
     <br>
-    <Row>
-      <Col span="8">
-        <Card>
-            <p slot="title">BZOJ</p>
-            <div v-if="BzojAccount===''">
-              <Button size="small" type="success" @click="handleShowAddOjAccountModal('BZOJ')">添加</Button>
-            </div>
-            <div v-else>
-              <Row>
-                <Col span="6">
-                  <a :href="handleGetAccountHref('https://www.lydsy.com/JudgeOnline/userinfo.php?user=', BzojAccount)" target="_blank">{{ BzojAccount }}</a>
-                </Col>
-                <Col offset="2" span="3">
-                  <Button size="small" type="warning" @click="handleShowChangeOjAccountModal('BZOJ')">修改</Button>
-                </Col>
-                <Col offset="1" span="3">
-                  <Button size="small" type="error" @click="confirmDelete('BZOJ')">删除</Button>
-                </Col>
-              </Row>
-            </div>
-        </Card>
-      </Col>
-    </Row>
+    <Card style="width: 30rem;">
+      <p slot="title">BZOJ</p>
+      <div v-if="BzojAccount===''">
+        <Button size="small" type="success" @click="handleShowAddOjAccountModal('BZOJ')">添加</Button>
+      </div>
+      <div v-else>
+        <a :href="handleGetAccountHref('https://www.lydsy.com/JudgeOnline/userinfo.php?user=', BzojAccount)" target="_blank">{{ BzojAccount }}</a>
+        <Button size="small" type="warning" style="margin-left: 2rem;" @click="handleShowChangeOjAccountModal('BZOJ')">修改</Button>
+        <Button size="small" type="error" style="margin-left: 2rem;" @click="confirmDelete('BZOJ')">删除</Button>
+      </div>
+    </Card>
     <br>
-    <Row>
-      <Col span="8">
-        <Card>
-            <p slot="title">CodeForces</p>
-            <div v-if="CfAccount===''">
-              <Button size="small" type="success" @click="handleShowAddOjAccountModal('CodeForces')">添加</Button>
-            </div>
-            <div v-else>
-              <Row>
-                <Col span="6">
-                  <a :href="handleGetAccountHref('https://www.codeforces.com/profile/', CfAccount)" target="_blank">{{ CfAccount }}</a>
-                </Col>
-                <Col offset="2" span="3">
-                  <Button size="small" type="warning" @click="handleShowChangeOjAccountModal('CodeForces')">修改</Button>
-                </Col>
-                <Col offset="1" span="3">
-                  <Button size="small" type="error" @click="confirmDelete('CodeForces')">删除</Button>
-                </Col>
-              </Row>
-            </div>
-        </Card>
-      </Col>
-    </Row>
+    <Card style="width: 30rem;">
+      <p slot="title">CodeForces</p>
+      <div v-if="CfAccount===''">
+        <Button size="small" type="success" @click="handleShowAddOjAccountModal('CodeForces')">添加</Button>
+      </div>
+      <div v-else>
+        <a :href="handleGetAccountHref('https://www.codeforces.com/profile/', CfAccount)" target="_blank">{{ CfAccount }}</a>
+        <Button size="small" type="warning" style="margin-left: 2rem;" @click="handleShowChangeOjAccountModal('CodeForces')">修改</Button>
+        <Button size="small" type="error" style="margin-left: 2rem;" @click="confirmDelete('CodeForces')">删除</Button>
+      </div>
+    </Card>
     <Modal
       v-model="addOjAccountModal">
       <p slot="header" style="color:#f60;text-align:center">
@@ -109,7 +61,7 @@
             <FormItem v-if="handleOjName==='CodeForces'" prop="verifyCode">
               <Input type="text" v-model="formItem.modalPassword" placeholder="验证码">
               <Icon type="ios-code" slot="prepend"></Icon>
-              <Button type="primary" @click="getCode()" v-model="getCodeButtonContent" :disabled="getCodeDisable" slot="append">{{getCodeButtonContent}}</Button>
+              <Button type="primary" @click="getCode()" :loading="getCode_loading" v-model="getCodeButtonContent" :disabled="getCodeDisable" slot="append">{{getCodeButtonContent}}</Button>
               </Input>
             </FormItem>
             <FormItem v-else label="密码" prop="password">
@@ -166,6 +118,7 @@
         },
         add_loading: false,
         change_loading: false,
+        getCode_loading: false,
         VjAccount: '',
         HduAccount: '',
         BzojAccount: '',
@@ -269,12 +222,14 @@
         if (that.formItem.modalUsername === '') {
           that.$Message.error('请输入CodeForces账号')
         } else {
+          that.getCode_loading = true
           that.totalTime = 60
           that.$http
             .post('/api/cfVerifyCode', {
               username: that.formItem.modalUsername
             })
             .then(res => {
+              that.getCode_loading = false
               if (res.data.status === 0) {
                 that.getCodeButtonContent = that.totalTime + 's后重新发送'
                 that.getCodeDisable = true

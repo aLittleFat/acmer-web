@@ -4,10 +4,10 @@
       {{ index+1 }}
     </template>
     <template slot-scope="{ row }" slot="grade">
-      {{ row.student.grade }}
+      {{ row.user.grade }}
     </template>
     <template slot-scope="{ row }" slot="name">
-      <router-link :to="{name:'Student',params:{id: row.student.id}}">{{ row.user.name }}</router-link>
+      <router-link :to="{name:'Student',params:{id: row.user.studentId}}">{{ row.user.name }}</router-link>
     </template>
     <template slot-scope="{ row }" slot="acNum">
       {{ row.acNum }}

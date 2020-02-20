@@ -3,19 +3,19 @@
   <div>
     <Table :loading="tableLoading" stripe :columns="columns" :data="users">
       <template slot-scope="{ row }" slot="name">
-          {{ row.user.name }}
+          {{ row.name }}
       </template>
       <template slot-scope="{ row }" slot="email">
-          {{ row.user.email }}
+          {{ row.email }}
       </template>
       <template slot-scope="{ row }" slot="grade">
-        <div v-if="row.student">
-          {{ row.student.grade }}
+        <div v-if="row.grade">
+          {{ row.grade }}
         </div>
       </template>
       <template slot-scope="{ row }" slot="studentId">
-        <div v-if="row.student !== null">
-          {{ row.student.id }}
+        <div v-if="row.studentId">
+          {{ row.studentId }}
         </div>
       </template>
       <template slot-scope="{ row, index }" slot="action">
@@ -64,31 +64,38 @@
       }
     },
     created () {
-      let that = this
-      that.$http
-        .get('/api/user_unVerify', {
-          params: {
-            page: 1,
-            size: that.pageSize
-          }
-        })
-        .then(res => {
-          that.users = res.data.content
-          that.totalNum = res.data.totalElements
-          that.tableLoading = false
-        })
+      this.getData()
     },
     methods: {
+      getData () {
+        let that = this
+        that.$http
+          .get('/api/user_unVerify', {
+            params: {
+              page: 1,
+              size: that.pageSize
+            }
+          })
+          .then(res => {
+            if (res.data.status === 0) {
+              that.users = res.data.data.content
+              that.totalNum = res.data.data.totalElements
+              that.tableLoading = false
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
       handleAccept (index) {
         let that = this
         that.tableLoading = true
         that.$http
           .put('/api/registerVerify', {
-            id: that.users[index].user.id
+            id: that.users[index].id
           })
           .then(res => {
-            that.remove(index)
-            that.$Message.info('审核成功')
+            that.getData()
+            that.$Message.success('审核成功')
             that.tableLoading = false
           })
       },
@@ -98,32 +105,37 @@
         that.$http
           .delete('/api/user', {
             params: {
-              id: that.users[index].user.id
+              id: that.users[index].id
             }
           })
           .then(res => {
-            that.remove(index)
-            that.$Message.info('已删除该账户，并发送邮件进行通知')
-            that.tableLoading = false
+            if (res.data.status === 0) {
+              that.getData()
+              that.$Message.success('已删除该账户，并发送邮件进行通知')
+              that.tableLoading = false
+            } else {
+              that.$Message.error(res.data.msg)
+            }
           })
-      },
-      remove (index) {
-        this.users.splice(index, 1)
       },
       handleGetUsers () {
         let that = this
         that.tableLoading = true
         that.$http
-          .get('/api/admin/verify/getUserUnverify', {
+          .get('/api/user_unVerify', {
             params: {
               page: that.$refs.page.currentPage,
               size: that.$refs.page.currentPageSize
             }
           })
           .then(res => {
-            that.users = res.data.content
-            that.totalNum = res.data.totalElements
-            that.tableLoading = false
+            if (res.data.status === 0) {
+              that.users = res.data.data.content
+              that.totalNum = res.data.data.totalElements
+              that.tableLoading = false
+            } else {
+              that.$Message.error(res.data.msg)
+            }
           })
       }
     }

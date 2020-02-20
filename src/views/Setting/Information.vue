@@ -3,17 +3,17 @@
     <Col span="8">
       <Form :model="formItem" :label-width="120" :rules="rule" ref="infoForm">
         <FormItem label="姓名:">
-          {{user.user.name}}
+          {{user.name}}
         </FormItem>
         <FormItem label="邮箱:">
-          {{user.user.email}}
+          {{user.email}}
         </FormItem>
-        <div v-if="user.student" >
+        <div v-if="user.studentId" >
           <FormItem label="年级:">
-            {{user.student.grade}}
+            {{user.grade}}
           </FormItem>
           <FormItem label="学号:">
-            {{user.student.id}}
+            {{user.studentId}}
           </FormItem>
         </div>
         <FormItem label="手机:" prop="phone">
@@ -21,7 +21,7 @@
             <Input v-model="formItem.phone" placeholder="请输入手机号码"></Input>
           </div>
           <div v-else>
-            {{user.user.phone}}
+            {{user.phone}}
           </div>
         </FormItem>
         <FormItem label="ICPC_Email:" prop="email">
@@ -29,7 +29,7 @@
             <Input v-model="formItem.icpcEmail" placeholder="请输入ICPC邮箱"></Input>
           </div>
           <div v-else>
-            {{user.student.icpcEmail}}
+            {{user.icpcEmail}}
           </div>
         </FormItem>
         <FormItem>
@@ -87,13 +87,13 @@
     },
     methods: {
       handleChange () {
-        this.formItem.phone = this.user.user.phone
-        this.formItem.icpcEmail = this.user.student.icpcEmail
+        this.formItem.phone = this.user.phone
+        this.formItem.icpcEmail = this.user.icpcEmail
         this.changing = true
       },
       handleCancle () {
-        this.formItem.phone = this.user.user.phone
-        this.formItem.icpcEmail = this.user.student.icpcEmail
+        this.formItem.phone = this.user.phone
+        this.formItem.icpcEmail = this.user.icpcEmail
         this.changing = false
       },
       handleSubmit (name) {

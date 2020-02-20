@@ -55,7 +55,7 @@
         this.$http
           .get('/api/info')
           .then(res => {
-            this.userName = res.data.data.user.name
+            this.userName = res.data.data.name
           })
       }
     },

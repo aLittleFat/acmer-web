@@ -90,24 +90,6 @@
                   width: 100
                 })
               }
-              for (i = 0; i < that.personalContestList.length; ++i) {
-                that.personalContestList[i].cellClassName = Object()
-                for (var j = 0; j < that.personalContestList[i].personalContestProblemRecords.length; ++j) {
-                  if (that.personalContestList[i].personalContestProblemRecords[j].status === 'Solved') {
-                    that.personalContestList[i].cellClassName[that.chars[j]] = 'table-ac-cell'
-                    that.personalContestList[i][that.chars[j]] = that.personalContestList[i].personalContestProblemRecords[j].acTime + '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
-                  } else if (that.personalContestList[i].personalContestProblemRecords[j].status === 'UpSolved') {
-                    that.personalContestList[i][that.chars[j]] = that.personalContestList[i].personalContestProblemRecords[j].acTime + '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
-                    that.personalContestList[i].cellClassName[that.chars[j]] = 'table-up-cell'
-                  } else if (that.personalContestList[i].personalContestProblemRecords[j].tries > 0) {
-                    that.personalContestList[i][that.chars[j]] = '(' + that.personalContestList[i].personalContestProblemRecords[j].tries + ')'
-                    that.personalContestList[i].cellClassName[that.chars[j]] = 'table-wa-cell'
-                  } else {
-                    that.personalContestList[i][that.chars[j]] = ''
-                    that.personalContestList[i].cellClassName[that.chars[j]] = ''
-                  }
-                }
-              }
               that.tableLoading = false
             } else {
               that.$Message.error(res.data.msg)
