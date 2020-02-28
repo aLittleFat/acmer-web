@@ -74,18 +74,11 @@
           .get(url)
           .then(res => {
             if (res.data.status === 0) {
-              that.personalContestList = res.data.data
-              for (var i = 0; i < that.personalContestList.length; ++i) {
-                if (that.problemNum < that.personalContestList[i].proNum) {
-                  that.problemNum = that.personalContestList[i].proNum
-                }
-              }
-              for (i = 0; i < that.problemNum; ++i) {
-                var ch = String.fromCharCode(65 + i)
-                that.chars.push(ch)
+              that.personalContestList = res.data.data.contests
+              for (let i = 0; i < res.data.data.columns.length; ++i) {
                 that.columns.push({
-                  'title': ch,
-                  'key': ch,
+                  'title': res.data.data.columns[i],
+                  'key': res.data.data.columns[i],
                   'align': 'center',
                   width: 100
                 })
