@@ -1,6 +1,7 @@
 <template>
   <Tabs value="name1">
     <TabPane label="概览" name="name1">
+      <StudentInfo :studentId="studentId" />
     </TabPane>
     <TabPane label="刷题情况" name="ac">
       <ACTimeLine :studentId="studentId" :height="710"/>
@@ -14,6 +15,7 @@
 <script>
   import PersonalContestTable from '@/components/PersonalContestTable.vue'
   import ACTimeLine from '@/components/ACTimeLine.vue'
+  import StudentInfo from '@/components/StudentInfo.vue'
   export default {
     data () {
       return {
@@ -25,7 +27,8 @@
     },
     components: {
       PersonalContestTable,
-      ACTimeLine
+      ACTimeLine,
+      StudentInfo
     },
     watch: {
         '$route' (to, from) {

@@ -12,6 +12,7 @@
               <Icon type="ios-navigate"></Icon>
               个人
           </template>
+          <MenuItem :to="{name:'Overview'}">概览</MenuItem>
           <MenuItem :to="{name:'MyAcRecord'}">刷题记录</MenuItem>
           <MenuItem :to="{name:'MyContest'}">比赛记录</MenuItem>
       </Submenu>

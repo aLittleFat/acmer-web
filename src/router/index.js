@@ -28,6 +28,11 @@ const routes = [
         component: () => import('@/views/Blank.vue'),
         children: [
           {
+            path: 'overview',
+            name: 'Overview',
+            component: () => import('@/components/StudentInfo.vue')
+          },
+          {
             path: 'myacrecord',
             name: 'MyAcRecord',
             alias: '',

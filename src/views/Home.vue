@@ -27,9 +27,9 @@
                   <MyMenu />
                 </Sider>
                 <Layout :style="{padding: '24px 24px 0px'}">
-                    <Content :style="{padding: '24px', minHeight: '810px', background: '#fff'}">
-                        <router-view></router-view>
-                    </Content>
+                  <Content :style="{padding: '24px', minHeight: '810px', background: '#fff'}">
+                      <router-view></router-view>
+                  </Content>
                   <Footer class="layout-footer-center">2020 &copy; Fat</Footer>
                 </Layout>
             </Layout>
@@ -41,8 +41,6 @@
   export default {
     data () {
       return {
-        logined: false,
-        userId: 0,
         history: [],
         userName: ''
       }

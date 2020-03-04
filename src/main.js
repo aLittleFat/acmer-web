@@ -4,12 +4,12 @@ import router from './router'
 import store from './store'
 import VueRouter from 'vue-router'
 import './plugins/iview.js'
-// import axios from 'axios'
-// import VueAxios from 'vue-axios'
+import VCharts from 'v-charts'
 import http from './http.js'
 Vue.prototype.$http = http
 
 Vue.use(VueRouter)
+Vue.use(VCharts)
 Vue.config.productionTip = false
 
 new Vue({

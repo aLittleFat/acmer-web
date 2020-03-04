@@ -20,7 +20,14 @@
         <p>Tags:</p>
         <Tag v-for="(tag, index) in info.myTags" closable @on-close="deleteTag(tag)" :key="index">{{tag}}</Tag>
         <Button v-if="addTagInput===false" icon="ios-add" type="dashed" size="small" @click="showAddTagInput()">添加标签</Button>
-        <Input v-if="addTagInput" type="text" style="width: 4rem;" v-model="addTagText" size="small" @on-enter="submitAddTagInput()" >{{addTagText}}</Input>
+        <AutoComplete
+          v-if="addTagInput"
+          v-model="addTagText"
+          size="small"
+          :data="tags"
+          @on-search="searchTags()"
+          style="width:4rem"></AutoComplete>
+        <!-- <Input v-if="addTagInput" type="text" style="width: 4rem;" v-model="addTagText" size="small" @on-enter="submitAddTagInput()" >{{addTagText}}</Input> -->
         <Button v-if="addTagInput" type="dashed" size="small" @click="submitAddTagInput()">确认</Button>
       </TabPane>
   </Tabs>
@@ -38,7 +45,8 @@ export default {
         type: Object
       },
       addTagInput: false,
-      addTagText: ''
+      addTagText: '',
+      tags: []
     }
   },
   created: function () {
@@ -111,6 +119,22 @@ export default {
           if (res.data.status === 0) {
             that.$Message.success('删除成功')
             that.getData()
+          } else {
+            that.$Message.error(res.data.msg)
+          }
+        })
+    },
+    searchTags () {
+      let that = this
+      that.$http
+        .get('/api/tag', {
+          params: {
+            key: that.addTagText
+          }
+        })
+        .then(res => {
+          if (res.data.status === 0) {
+            that.tags = res.data.data
           } else {
             that.$Message.error(res.data.msg)
           }
