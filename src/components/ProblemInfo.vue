@@ -41,9 +41,7 @@ export default {
   },
   data () {
     return {
-      info: {
-        type: Object
-      },
+      info: null,
       addTagInput: false,
       addTagText: '',
       tags: []

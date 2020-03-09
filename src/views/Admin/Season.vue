@@ -18,9 +18,7 @@
   export default {
     data () {
       return {
-        season: {
-          type: Object
-        }
+        season: null
       }
     },
     created: function () {

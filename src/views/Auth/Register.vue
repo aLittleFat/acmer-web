@@ -200,7 +200,7 @@
           that.$Message.error('请输入正确的邮箱格式')
         } else {
         that.$http
-          .post('/auth/sendVerifyEmailCode', {
+          .post('/api/auth/sendVerifyEmailCode', {
             email: that.formInline.email
           })
           .then(res => {
@@ -228,7 +228,7 @@
         that.$refs[name].validate((valid) => {
           if (valid) {
             that.$http
-              .post('/auth/register', {
+              .post('/api/auth/register', {
                 email: that.formInline.email,
                 password: that.formInline.password,
                 phone: that.formInline.phone,

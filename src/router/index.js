@@ -30,7 +30,7 @@ const routes = [
           {
             path: 'overview',
             name: 'Overview',
-            component: () => import('@/components/StudentInfo.vue')
+            component: () => import('@/views/Personal/Overview.vue')
           },
           {
             path: 'myacrecord',
@@ -98,6 +98,11 @@ const routes = [
         path: 'student/:id',
         name: 'Student',
         component: () => import('@/views/Profile/Student.vue')
+      },
+      {
+        path: 'team/:id',
+        name: 'Team',
+        component: () => import('@/views/Profile/Team.vue')
       }
     ]
   },

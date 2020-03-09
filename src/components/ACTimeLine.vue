@@ -44,7 +44,7 @@
         notShowMy: false,
         queryTime: 0,
         loading: true,
-        acList: Object
+        acList: []
       }
     },
     // components: {

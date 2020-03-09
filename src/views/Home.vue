@@ -61,7 +61,7 @@
       logout () {
         let that = this
         that.$http
-          .get('/auth/logout')
+          .get('/api/auth/logout')
           .then(res => {
             localStorage.removeItem('token')
             that.$Message.info('注销成功')

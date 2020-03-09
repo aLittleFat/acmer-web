@@ -82,7 +82,7 @@
         that.$refs[name].validate((valid) => {
           if (valid) {
             that.$http
-              .post('/auth/login', {
+              .post('/api/auth/login', {
                 email: that.formInline.email,
                 password: that.formInline.password
               })

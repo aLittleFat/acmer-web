@@ -61,7 +61,7 @@ export default {
         columns: ['tagName', 'number'],
         rows: []
       },
-      studentInfo: Object()
+      studentInfo: null
     }
   },
   created: function () {

@@ -31,9 +31,7 @@
         choceModal: false,
         add_loading: false,
         seasonStudentList: [],
-        studentChoices: {
-          type: Object
-        },
+        studentChoices: null,
         columns: [
           {
             title: '年级',

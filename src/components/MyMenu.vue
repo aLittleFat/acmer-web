@@ -1,9 +1,9 @@
 <template>
   <Menu ref="menu" theme="light" width="auto" :open-names="['1']" @on-select="selectMenu()">
-    <MenuGroup title="审核">
+    <MenuGroup v-if="roles.is_admin" title="审核">
         <MenuItem name="RegisterVerify" :to="{name:'RegisterVerify'}">注册审核</MenuItem>
     </MenuGroup>
-    <MenuGroup title="个人">
+    <MenuGroup v-if="roles.is_student" title="个人">
         <MenuItem name="Overview" :to="{name:'Overview'}">概览</MenuItem>
         <MenuItem name="MyAcRecord" :to="{name:'MyAcRecord'}">刷题记录</MenuItem>
         <MenuItem name="MyContest" :to="{name:'MyContest'}">比赛记录</MenuItem>
@@ -36,14 +36,24 @@
           </div>
         </Modal>
     </MenuGroup>
+    <MenuGroup v-if="teamList.length > 0" title="队伍">
+      <MenuItem v-for="(item,index) in teamList" :name="'Team'+item.id" :to="{name:'Team', params:{id:item.id}}" :key="index">
+        <div v-if="item.teamName">
+          {{item.teamName}}({{item.seasonName}})
+        </div>
+        <div v-else>
+          未命名({{item.seasonName}})
+        </div>
+      </MenuItem>
+    </MenuGroup>
     <MenuGroup title="设置">
         <MenuItem name="Information" :to="{name:'Information'}">个人信息</MenuItem>
-        <MenuItem name="OjAccount" :to="{name:'OjAccount'}">OJ账号</MenuItem>
+        <MenuItem v-if="roles.is_student" name="OjAccount" :to="{name:'OjAccount'}">OJ账号</MenuItem>
     </MenuGroup>
     <MenuGroup title="排行榜">
         <MenuItem name="PersonalAcRank" :to="{name:'PersonalAcRank'}">个人刷题榜</MenuItem>
     </MenuGroup>
-    <MenuGroup title="管理">
+    <MenuGroup v-if="roles.is_admin" title="管理">
         <MenuItem name="SeasonListAdmin" :to="{name:'SeasonListAdmin'}">赛季管理</MenuItem>
     </MenuGroup>
   </Menu>
@@ -56,6 +66,8 @@
       return {
         add_personal_contest_modal: false,
         add_loading: false,
+        roles: null,
+        teamList: [],
         formItem: {
           oj: '',
           account: '',
@@ -109,7 +121,7 @@
       }
     },
     created: function () {
-       //
+       this.getRoles()
     },
     methods: {
       addPersonalContest () {
@@ -152,6 +164,33 @@
           that.$refs['addPersonalContestRecordForm'].resetFields()
           that.add_personal_contest_modal = true
         }
+      },
+      getRoles () {
+        let that = this
+        that.$http
+          .get('/api/auth/roles')
+          .then(res => {
+            if (res.data.status === 0) {
+              that.roles = res.data.data
+              if (that.roles.is_student) {
+                that.getTeams()
+              }
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      getTeams () {
+        let that = this
+        that.$http
+          .get('/api/team')
+          .then(res => {
+            if (res.data.status === 0) {
+              that.teamList = res.data.data
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
       }
     },
     computed: {

@@ -120,7 +120,7 @@
           that.$Message.error('请输入正确的邮箱格式')
         } else {
         that.$http
-          .post('/auth/sendForgetPasswordVerifyEmailCode', {
+          .post('/api/auth/sendForgetPasswordVerifyEmailCode', {
             email: that.formInline.email
           })
           .then(res => {
@@ -148,7 +148,7 @@
         that.$refs[name].validate((valid) => {
           if (valid) {
             that.$http
-              .post('/auth/forgetPassword', {
+              .post('/api/auth/forgetPassword', {
                 email: that.formInline.email,
                 password: that.formInline.password,
                 verifyCode: that.formInline.verifyCode

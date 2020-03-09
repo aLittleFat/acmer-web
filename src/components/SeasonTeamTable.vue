@@ -7,10 +7,20 @@
         {{row.team.rank}}队
       </template>
       <template slot-scope="{ row }" slot="nameCn">
-        {{row.team.nameCn}}
+        <router-link :to="{name:'Team', params:{id:row.team.id}}">
+          <div v-if="row.team.nameCn">
+            {{row.team.nameCn}}
+          </div>
+          <div v-else>未命名</div>
+        </router-link>
       </template>
       <template slot-scope="{ row }" slot="nameEn">
-        {{row.team.nameEn}}
+        <div>
+          <div v-if="row.team.nameEn">
+            {{row.team.nameEn}}
+          </div>
+          <div v-else>Untitled</div>
+        </div>
       </template>
       <template slot-scope="{ row }" slot="vjAccount">
         {{row.team.vjAccount}}

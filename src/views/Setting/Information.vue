@@ -64,7 +64,7 @@
       // }
       return {
         user: {
-          type: Object
+          type: null
         },
         formItem: {
           phone: '',
