@@ -2,6 +2,7 @@
   <Menu ref="menu" theme="light" width="auto" :open-names="['1']" @on-select="selectMenu()">
     <MenuGroup v-if="roles.is_admin" title="审核">
         <MenuItem name="RegisterVerify" :to="{name:'RegisterVerify'}">注册审核</MenuItem>
+        <MenuItem name="RetireVerify" :to="{name:'RetireVerify'}">退役审核</MenuItem>
     </MenuGroup>
     <MenuGroup v-if="roles.is_student" title="个人">
         <MenuItem name="Overview" :to="{name:'Overview'}">概览</MenuItem>

@@ -15,6 +15,10 @@
           <FormItem label="学号:">
             {{user.studentId}}
           </FormItem>
+          <FormItem label="状态:">
+            {{user.status}}
+            <Button type="error" @click="requestRetire" v-if="user.status==='现役'" style="margin-left: 1.5rem;">申请退役</Button>
+          </FormItem>
         </div>
         <FormItem label="手机:" prop="phone">
           <div v-if="changing">
@@ -32,16 +36,18 @@
             {{user.icpcEmail}}
           </div>
         </FormItem>
+        <FormItem label="QQ:" prop="qq">
+          <div v-if="changing">
+            <Input v-model="formItem.qq" placeholder="请输入QQ"></Input>
+          </div>
+          <div v-else>
+            {{user.qq}}
+          </div>
+        </FormItem>
         <FormItem>
           <div v-if="changing">
-            <Row>
-              <Col span="4">
-                <Button type="primary" @click="handleSubmit('infoForm')">提交</Button>
-              </Col>
-              <Col offset="2">
-                <Button type="primary" @click="handleCancle()">取消</Button>
-              </Col>
-            </Row>
+            <Button type="success" @click="handleSubmit('infoForm')">提交</Button>
+            <Button type="error" @click="handleCancle()" style="margin-left: 1.5rem;">取消</Button>
           </div>
           <div v-else>
             <Button type="primary" @click="handleChange()">修改</Button>
@@ -55,20 +61,14 @@
 <script>
   export default {
     data () {
-      // const valiPhone = (rule, value, callback) => {
-      //     if (value !== '' && /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|170|18[0|1|2|3|5|6|7|8|9])\d{8}$/.test(value) === false) {
-      //         callback(new Error('请输入正确的手机号码'))
-      //     } else {
-      //         callback()
-      //     }
-      // }
       return {
         user: {
           type: null
         },
         formItem: {
           phone: '',
-          icpcEmail: ''
+          icpcEmail: '',
+          qq: ''
         },
         rule: {
           phone: [{
@@ -80,6 +80,11 @@
             type: 'email',
             message: '请输入正确的ICPC邮箱',
             trigger: 'blur'
+          }],
+          qq: [{
+            pattern: /^\d{6,10}$/,
+            message: '请输入正确的QQ号',
+            trigger: 'blur'
           }]
         },
         changing: false
@@ -89,11 +94,13 @@
       handleChange () {
         this.formItem.phone = this.user.phone
         this.formItem.icpcEmail = this.user.icpcEmail
+        this.formItem.qq = this.user.qq
         this.changing = true
       },
       handleCancle () {
         this.formItem.phone = this.user.phone
         this.formItem.icpcEmail = this.user.icpcEmail
+        this.formItem.qq = this.user.qq
         this.changing = false
       },
       handleSubmit (name) {
@@ -103,7 +110,8 @@
             that.$http
               .put('/api/info', {
                 phone: that.formItem.phone,
-                icpcEmail: that.formItem.icpcEmail
+                icpcEmail: that.formItem.icpcEmail,
+                qq: that.formItem.qq
               })
               .then(res => {
                 if (res.data.status === 0) {
@@ -126,6 +134,19 @@
           .then(res => {
             if (res.data.status === 0) {
               that.user = res.data.data
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      requestRetire () {
+        let that = this
+        that.$http
+          .put('/api/retire/' + that.user.studentId)
+          .then(res => {
+            if (res.data.status === 0) {
+              that.$Message.success('申请成功')
+              that.getData()
             } else {
               that.$Message.error(res.data.msg)
             }

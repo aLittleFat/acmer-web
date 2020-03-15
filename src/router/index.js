@@ -19,6 +19,11 @@ const routes = [
             name: 'RegisterVerify',
             alias: '',
             component: () => import('@/views/Verify/RegisterVerify.vue')
+          },
+          {
+            path: 'retireverify',
+            name: 'RetireVerify',
+            component: () => import('@/views/Verify/RetireVerify.vue')
           }
         ]
       },
