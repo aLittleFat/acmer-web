@@ -4,8 +4,11 @@
       <!-- <StudentInfo :studentId="studentId" /> -->
     </TabPane>
     <TabPane label="训练情况" name="contest" >
-      <TeamContestTable :teamId="teamId" :height="710"/>
+      <TeamContestTable :teamId="teamId" :height="620"/>
     </TabPane>
+    <!-- <TabPane label="训练情况" name="contest" >
+      <TeamContestTable :teamId="teamId" :height="620"/>
+    </TabPane> -->
   </Tabs>
 </template>
 

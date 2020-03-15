@@ -1,10 +1,7 @@
 <template>
   <Table :loading="tableLoading" :height="height" :columns="columns" :data="personalContestList">
     <template slot-scope="{ row }" slot="title">
-        {{ row.title }}
-    </template>
-    <template slot-scope="{ row }" slot="solved">
-        {{ row.solved }}
+        {{ row.contestTitle }}
     </template>
     <template slot-scope="{ row }" slot="penalty">
         {{ row.penalty }}
@@ -12,6 +9,11 @@
     <template slot-scope="{ row }" slot="solution">
         {{ row.solution }}
     </template>
+    <!-- <template v-for="item in problemList" slot-scope="{ row }" :slot="item">
+      <div :key="item">
+        <div v-if="row.solved.includes(item)" class="ivu-table table-ac-cell"></div>
+      </div>
+    </template> -->
   </Table>
 </template>
 
@@ -33,7 +35,7 @@
           },
           {
             title: 'Solved',
-            key: 'solved',
+            key: 'solvedNumber',
             fixed: 'left',
             width: 90
           },
@@ -51,10 +53,9 @@
           }
         ],
         personalContestList: [],
-        chars: [],
+        problemList: [],
         problemNum: 0,
-        tableLoading: true,
-        includeRetired: false
+        tableLoading: true
       }
     },
     created: function () {
@@ -74,13 +75,23 @@
           .get(url)
           .then(res => {
             if (res.data.status === 0) {
-              that.personalContestList = res.data.data.contests
-              for (let i = 0; i < res.data.data.columns.length; ++i) {
+              that.personalContestList = res.data.data.contestRecord
+              for (let i = 0; i < that.personalContestList.length; ++i) {
+                that.personalContestList[i].cellClassName = Object()
+                for (let j = 0; j < that.personalContestList[i].solved.length; ++j) {
+                  that.personalContestList[i].cellClassName[that.personalContestList[i].solved[j]] = 'table-ac-cell'
+                }
+                for (let j = 0; j < that.personalContestList[i].upSolved.length; ++j) {
+                  that.personalContestList[i].cellClassName[that.personalContestList[i].upSolved[j]] = 'table-up-cell'
+                }
+              }
+              that.problemList = res.data.data.problemList
+              for (let i = 0; i < res.data.data.problemList.length; ++i) {
                 that.columns.push({
-                  'title': res.data.data.columns[i],
-                  'key': res.data.data.columns[i],
+                  'title': that.problemList[i],
+                  'key': that.problemList[i],
                   'align': 'center',
-                  width: 100
+                  width: 70
                 })
               }
               that.tableLoading = false
@@ -100,15 +111,9 @@
 
 <style>
   .ivu-table .table-ac-cell {
-    background-color: #e9f6ea;
-    color: #67b16b;
-  }
-  .ivu-table .table-wa-cell {
-    background-color: #fae8e8;
-    color: #de6531;
+    background-color: #00c853;
   }
   .ivu-table .table-up-cell {
-    background-color: #a3d7d6;
-    color: #67b16b;
+    background-color: #e3e300;
   }
 </style>

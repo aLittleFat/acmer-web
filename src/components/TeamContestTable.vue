@@ -1,18 +1,49 @@
 <template>
-  <Table :loading="tableLoading" :height="height" :columns="columns" :data="teamContestList">
-    <template slot-scope="{ row }" slot="title">
-        {{ row.title }}
-    </template>
-    <template slot-scope="{ row }" slot="solved">
-        {{ row.solved }}
-    </template>
-    <template slot-scope="{ row }" slot="penalty">
-        {{ row.penalty }}
-    </template>
-    <template slot-scope="{ row }" slot="solution">
-        {{ row.solution }}
-    </template>
-  </Table>
+  <div>
+    <Button type="success" @click="showAddTeamContestModal()">添加竞赛</Button>
+    <Modal v-model="add_team_contest_modal" width="360">
+      <p slot="header" style="text-align:center">
+        <span>申报组队竞赛</span>
+      </p>
+      <Form :model="formItem" :label-width="100" :rules="rule" ref="addTeamContestRecordForm">
+        <FormItem label="OJ" prop="oj">
+          <Select v-model="formItem.oj">
+            <Option v-for="item in ojList" :value="item.value" :key="item.value">{{item.label}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="竞赛ID" prop="cId">
+          <Input v-model="formItem.cId" placeholder="请输入竞赛ID"></Input>
+        </FormItem>
+        <FormItem v-if="formItem.needPassword && formItem.oj !== 'HDU'" label="竞赛密码" prop="password">
+          <Input type="password" v-model="formItem.password" placeholder="请输入参赛密码"></Input>
+        </FormItem>
+        <FormItem label="参赛账号" prop="account">
+          <Input v-model="formItem.account" placeholder="请输入参赛账号"></Input>
+        </FormItem>
+        <FormItem v-if="formItem.needPassword && formItem.oj === 'HDU'" label="登录密码" prop="password">
+          <Input type="password" v-model="formItem.password" placeholder="请输入登录密码"></Input>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button type="success" :loading="add_loading" @click="addTeamContest()">添加</Button>
+      </div>
+    </Modal>
+    <Divider />
+    <Table :loading="tableLoading" :height="height" :columns="columns" :data="teamContestList">
+      <template slot-scope="{ row }" slot="title">
+          {{ row.contestTitle }}
+      </template>
+      <template slot-scope="{ row }" slot="solved">
+          {{ row.solved }}
+      </template>
+      <template slot-scope="{ row }" slot="penalty">
+          {{ row.penalty }}
+      </template>
+      <template slot-scope="{ row }" slot="solution">
+          {{ row.solution }}
+      </template>
+    </Table>
+  </div>
 </template>
 
 <script>
@@ -33,7 +64,7 @@
           },
           {
             title: 'Solved',
-            key: 'solved',
+            key: 'solvedNumber',
             fixed: 'left',
             width: 90
           },
@@ -51,9 +82,62 @@
           }
         ],
         teamContestList: [],
-        chars: [],
+        problemList: [],
         problemNum: 0,
-        tableLoading: true
+        tableLoading: true,
+        add_team_contest_modal: false,
+        add_loading: false,
+        roles: null,
+        formItem: {
+          oj: '',
+          account: '',
+          password: '',
+          cId: '',
+          needPassword: false
+        },
+        rule: {
+          oj: [{
+            required: true,
+            tigger: 'blur'
+          }],
+          cId: [{
+            required: true,
+            tigger: 'blur',
+            message: '请输入竞赛ID'
+          }],
+          account: [{
+            required: true,
+            tigger: 'blur',
+            message: '请输入参赛账号'
+          }],
+          password: [{
+            required: true,
+            tigger: 'blur',
+            message: '请输入密码'
+          }]
+        },
+        ojList: [
+          {
+            value: 'VJ',
+            label: 'VJ'
+          },
+          {
+            value: 'HDU',
+            label: 'HDU'
+          },
+          {
+            value: 'CodeForces',
+            label: 'CodeForces'
+          },
+          {
+            value: '计蒜客',
+            label: '计蒜客'
+          },
+          {
+            value: '牛客',
+            label: '牛客'
+          }
+        ]
       }
     },
     created: function () {
@@ -68,13 +152,23 @@
           .get(url)
           .then(res => {
             if (res.data.status === 0) {
-              that.teamContestList = res.data.data.contests
-              for (let i = 0; i < res.data.data.columns.length; ++i) {
+              that.teamContestList = res.data.data.contestRecord
+              for (let i = 0; i < that.teamContestList.length; ++i) {
+                that.teamContestList[i].cellClassName = Object()
+                for (let j = 0; j < that.teamContestList[i].solved.length; ++j) {
+                  that.teamContestList[i].cellClassName[that.teamContestList[i].solved[j]] = 'table-ac-cell'
+                }
+                for (let j = 0; j < that.teamContestList[i].upSolved.length; ++j) {
+                  that.teamContestList[i].cellClassName[that.teamContestList[i].upSolved[j]] = 'table-up-cell'
+                }
+              }
+              that.problemList = res.data.data.problemList
+              for (let i = 0; i < res.data.data.problemList.length; ++i) {
                 that.columns.push({
-                  'title': res.data.data.columns[i],
-                  'key': res.data.data.columns[i],
+                  'title': that.problemList[i],
+                  'key': that.problemList[i],
                   'align': 'center',
-                  width: 100
+                  width: 70
                 })
               }
               that.tableLoading = false
@@ -82,27 +176,82 @@
               that.$Message.error(res.data.msg)
             }
           })
+      },
+      addTeamContest () {
+        let that = this
+        that.$refs['addTeamContestRecordForm'].validate((valid) => {
+          if (valid) {
+            that.add_loading = true
+            that.$http
+              .put('/api/teamContestRecord', {
+                teamId: that.teamId,
+                ojName: that.formItem.oj,
+                cId: that.formItem.cId,
+                account: that.formItem.account,
+                password: that.formItem.password
+              })
+              .then(res => {
+                that.add_loading = false
+                if (res.data.status === 0) {
+                  that.$Message.success('添加成功')
+                  that.add_team_contest_modal = false
+                } else {
+                  that.$Message.error(res.data.msg)
+                  if (res.data.msg === '需要密码') {
+                    that.formItem.needPassword = true
+                  }
+                  if (res.data.msg === '该比赛需要登录') {
+                    that.formItem.needPassword = true
+                  }
+                }
+              })
+          } else {
+            that.$Message.error('请正确填写表单')
+          }
+        })
+      },
+      showAddTeamContestModal () {
+        let that = this
+        that.formItem.needPassword = false
+        that.$refs['addTeamContestRecordForm'].resetFields()
+        that.add_team_contest_modal = true
       }
+    },
+    computed: {
+      // oj () {
+      //   return this.formItem.oj
+      // }
     },
     watch: {
       teamId: function () {
         this.getData()
       }
+      // oj: function () {
+      //   let that = this
+      //   that.formItem.needPassword = false
+      //   that.formItem.password = ''
+      //   that.formItem.cId = ''
+      //   that.$http
+      //     .get('/api/ojAccount', {
+      //       params: {
+      //         ojName: that.formItem.oj
+      //       }
+      //     })
+      //     .then(res => {
+      //       if (res.data.status === 0) {
+      //         that.formItem.account = res.data.data
+      //       }
+      //     })
+      // }
     }
   }
 </script>
 
 <style>
   .ivu-table .table-ac-cell {
-    background-color: #e9f6ea;
-    color: #67b16b;
-  }
-  .ivu-table .table-wa-cell {
-    background-color: #fae8e8;
-    color: #de6531;
+    background-color: #00c853;
   }
   .ivu-table .table-up-cell {
-    background-color: #a3d7d6;
-    color: #67b16b;
+    background-color: #e3e300;
   }
 </style>

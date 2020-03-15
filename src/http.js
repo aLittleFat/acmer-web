@@ -3,7 +3,7 @@ import qs from 'qs'
 import router from './router'
 
 // axios 配置
-axios.defaults.timeout = 30000
+axios.defaults.timeout = 60000
 // axios.defaults.baseURL = 'http://localhost/'
 
 // http request 拦截器
