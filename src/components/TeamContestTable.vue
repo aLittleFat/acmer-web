@@ -29,15 +29,9 @@
       </div>
     </Modal>
     <Divider />
-    <Table :loading="tableLoading" :height="height" :columns="columns" :data="teamContestList">
+    <Table :loading="tableLoading" :columns="columns" :data="teamContestList">
       <template slot-scope="{ row }" slot="title">
-          {{ row.contestTitle }}
-      </template>
-      <template slot-scope="{ row }" slot="solved">
-          {{ row.solved }}
-      </template>
-      <template slot-scope="{ row }" slot="penalty">
-          {{ row.penalty }}
+          <router-link :to="{name:'Contest',params:{id:row.contestId}}">{{ row.contestTitle }}</router-link>
       </template>
       <template slot-scope="{ row }" slot="solution">
           {{ row.solution }}
@@ -59,25 +53,25 @@
           {
             title: '比赛名称',
             slot: 'title',
-            fixed: 'left',
+            // fixed: 'left',
             width: 300
           },
           {
             title: 'Solved',
             key: 'solvedNumber',
-            fixed: 'left',
+            // fixed: 'left',
             width: 90
           },
           {
             title: '罚时',
             key: 'penalty',
-            fixed: 'left',
+            // fixed: 'left',
             width: 90
           },
           {
             title: '题解',
             slot: 'solution',
-            fixed: 'left',
+            // fixed: 'left',
             width: 80
           }
         ],
@@ -194,6 +188,7 @@
                 that.add_loading = false
                 if (res.data.status === 0) {
                   that.$Message.success('添加成功')
+                  that.getData()
                   that.add_team_contest_modal = false
                 } else {
                   that.$Message.error(res.data.msg)

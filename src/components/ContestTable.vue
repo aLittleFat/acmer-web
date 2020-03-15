@@ -1,29 +1,40 @@
 <template>
-  <Table :loading="tableLoading" :height="height" :columns="columns" :data="personalContestList">
-    <template slot-scope="{ row }" slot="title">
-        <router-link :to="{name:'Contest',params:{id:row.contestId}}">{{ row.contestTitle }}</router-link>
-    </template>
+  <Table :columns="columns" :data="contestRecordList">
     <template slot-scope="{ row }" slot="solution">
         {{ row.solution }}
+    </template>
+    <template slot-scope="{ index }" slot="rank">
+      {{index + 1}}
+    </template>
+    <template slot-scope="{ row }" slot="participants">
+      <div>
+        <router-link :to="{name:'Student',params:{id:row.studentId}}" v-if="row.studentId">{{row.participants}}</router-link>
+        <router-link :to="{name:'Team',params:{id:row.teamId}}" v-if="row.teamId">{{row.participants}}</router-link>
+      </div>
     </template>
   </Table>
 </template>
 
 <script>
   export default {
-    name: 'PersonalContestTable',
+    name: 'ContestTable',
     props: {
-      studentId: String,
-      height: Number
+      contestId: Number
     },
     data () {
       return {
         columns: [
           {
-            title: '比赛名称',
-            slot: 'title',
+            title: '排名',
             // fixed: 'left',
-            width: 300
+            slot: 'rank',
+            width: 90
+          },
+          {
+            title: '参赛者',
+            slot: 'participants',
+            // fixed: 'left',
+            width: 180
           },
           {
             title: 'Solved',
@@ -44,9 +55,8 @@
             width: 80
           }
         ],
-        personalContestList: [],
+        contestRecordList: [],
         problemList: [],
-        problemNum: 0,
         tableLoading: true
       }
     },
@@ -57,24 +67,23 @@
       getData () {
         let that = this
         that.tableLoading = true
-        var url = ''
-        if (that.studentId === '') {
-          url = '/api/personalContest'
-        } else {
-          url = '/api/personalContest/' + that.studentId
-        }
+        var url = '/api/contestTable/'
         that.$http
-          .get(url)
+          .get(url, {
+            params: {
+              contestId: that.contestId
+            }
+          })
           .then(res => {
             if (res.data.status === 0) {
-              that.personalContestList = res.data.data.contestRecord
-              for (let i = 0; i < that.personalContestList.length; ++i) {
-                that.personalContestList[i].cellClassName = Object()
-                for (let j = 0; j < that.personalContestList[i].solved.length; ++j) {
-                  that.personalContestList[i].cellClassName[that.personalContestList[i].solved[j]] = 'table-ac-cell'
+              that.contestRecordList = res.data.data.contestRecordLines
+              for (let i = 0; i < that.contestRecordList.length; ++i) {
+                that.contestRecordList[i].cellClassName = Object()
+                for (let j = 0; j < that.contestRecordList[i].solved.length; ++j) {
+                  that.contestRecordList[i].cellClassName[that.contestRecordList[i].solved[j]] = 'table-ac-cell'
                 }
-                for (let j = 0; j < that.personalContestList[i].upSolved.length; ++j) {
-                  that.personalContestList[i].cellClassName[that.personalContestList[i].upSolved[j]] = 'table-up-cell'
+                for (let j = 0; j < that.contestRecordList[i].upSolved.length; ++j) {
+                  that.contestRecordList[i].cellClassName[that.contestRecordList[i].upSolved[j]] = 'table-up-cell'
                 }
               }
               that.problemList = res.data.data.problemList
@@ -94,7 +103,7 @@
       }
     },
     watch: {
-      studentId: function () {
+      contestId: function () {
         this.getData()
       }
     }

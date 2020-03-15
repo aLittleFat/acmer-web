@@ -25,9 +25,9 @@
       <Divider />
     </Col>
     <Col span="12">
-      <ve-pie :data="ojChartData" :settings="chartSettings"></ve-pie>
+      <ve-pie :data="ojChartData" height="300px" :settings="chartSettings"></ve-pie>
       <Divider />
-      <ve-pie :data="tagChartData" :settings="chartSettings"></ve-pie>
+      <ve-pie :data="tagChartData" height="300px" :settings="chartSettings"></ve-pie>
     </Col>
   </Row>
 </template>

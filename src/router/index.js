@@ -103,6 +103,11 @@ const routes = [
         path: 'team/:id',
         name: 'Team',
         component: () => import('@/views/Profile/Team.vue')
+      },
+      {
+        path: 'contest/:id',
+        name: 'Contest',
+        component: () => import('@/views/Contest/Contest.vue')
       }
     ]
   },
