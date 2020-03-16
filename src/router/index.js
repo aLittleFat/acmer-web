@@ -24,6 +24,11 @@ const routes = [
             path: 'retireverify',
             name: 'RetireVerify',
             component: () => import('@/views/Verify/RetireVerify.vue')
+          },
+          {
+            path: 'awardverify',
+            name: 'AwardVerify',
+            component: () => import('@/views/Verify/AwardVerify.vue')
           }
         ]
       },

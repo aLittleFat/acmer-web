@@ -1,19 +1,17 @@
 <template>
-  <Tabs value="name1">
-    <TabPane label="概览" name="name1">
-      <!-- <StudentInfo :studentId="studentId" /> -->
+  <Tabs value="info">
+    <TabPane label="概览" name="info">
+      <TeamInfo :teamId="teamId"/>
     </TabPane>
     <TabPane label="训练情况" name="contest" >
       <TeamContestTable :teamId="teamId" :height="620"/>
     </TabPane>
-    <!-- <TabPane label="训练情况" name="contest" >
-      <TeamContestTable :teamId="teamId" :height="620"/>
-    </TabPane> -->
   </Tabs>
 </template>
 
 <script>
   import TeamContestTable from '@/components/TeamContestTable.vue'
+  import TeamInfo from '@/components/TeamInfo.vue'
   export default {
     data () {
       return {
@@ -24,7 +22,8 @@
       // console.log(this.studentId)
     },
     components: {
-      TeamContestTable
+      TeamContestTable,
+      TeamInfo
     },
     watch: {
         '$route' (to, from) {
