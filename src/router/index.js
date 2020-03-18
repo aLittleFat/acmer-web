@@ -118,6 +118,16 @@ const routes = [
         path: 'contest/:id',
         name: 'Contest',
         component: () => import('@/views/Contest/Contest.vue')
+      },
+      {
+        path: 'qualifying',
+        name: 'Qualifyings',
+        component: () => import('@/views/Qualifying/SeasonList.vue')
+      },
+      {
+        path: 'qualifying/:id',
+        name: 'Qualifying',
+        component: () => import('@/views/Qualifying/Qualifying.vue')
       }
     ]
   },

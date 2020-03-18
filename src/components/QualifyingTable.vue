@@ -4,7 +4,7 @@
     <Divider />
     <Table :loading="tableLoading" stripe :columns="columns" :data="qualifyingList">
       <template slot-scope="{ row }" slot="action">
-        <Button type="error" @click="handleDeleteStudent(row.studentId)">删除</Button>
+        <Button type="error" @click="handleDeleteQualifying(row.id)">删除</Button>
       </template>
     </Table>
     <Modal v-model="add_modal" width="360">
@@ -178,11 +178,7 @@
       handleDeleteQualifying (qualifyingId) {
         let that = this
         that.$http
-          .delete('/api/season/' + that.$route.params.id + '/student', {
-            params: {
-              qualifyingId: qualifyingId
-            }
-          })
+          .delete('/api/qualifying/' + qualifyingId)
           .then(res => {
             if (res.data.status === 0) {
               that.$Message.success('删除成功')

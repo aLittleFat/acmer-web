@@ -1,44 +1,57 @@
 <template>
-  <Menu ref="menu" theme="light" width="auto" :open-names="['1']" @on-select="selectMenu()">
-    <MenuGroup v-if="roles.is_admin" title="审核">
-        <MenuItem name="RegisterVerify" :to="{name:'RegisterVerify'}">注册审核</MenuItem>
-        <MenuItem name="RetireVerify" :to="{name:'RetireVerify'}">退役审核</MenuItem>
-        <MenuItem name="AwardVerify" :to="{name:'AwardVerify'}">获奖审核</MenuItem>
-    </MenuGroup>
-    <MenuGroup v-if="roles.is_student" title="个人">
-        <MenuItem name="Overview" :to="{name:'Overview'}">概览</MenuItem>
-        <MenuItem name="MyAcRecord" :to="{name:'MyAcRecord'}">刷题记录</MenuItem>
-        <MenuItem name="MyContest" :to="{name:'MyContest'}">比赛记录</MenuItem>
-        <MenuItem name="addPersonalContestRecord" >申报个人比赛</MenuItem>
-        <Modal v-model="add_personal_contest_modal" width="360">
-          <p slot="header" style="text-align:center">
-            <span>申报个人竞赛</span>
-          </p>
-          <Form :model="formItem" :label-width="100" :rules="rule" ref="addPersonalContestRecordForm">
-            <FormItem label="OJ" prop="oj">
-              <Select v-model="formItem.oj">
-                <Option v-for="item in ojList" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select>
-            </FormItem>
-            <FormItem label="竞赛ID" prop="cId">
-              <Input v-model="formItem.cId" placeholder="请输入竞赛ID"></Input>
-            </FormItem>
-            <FormItem v-if="formItem.needPassword && formItem.oj !== 'HDU'" label="竞赛密码" prop="password">
-              <Input type="password" v-model="formItem.password" placeholder="请输入参赛密码"></Input>
-            </FormItem>
-            <FormItem label="参赛账号" prop="account">
-              <Input v-model="formItem.account" placeholder="请输入参赛账号"></Input>
-            </FormItem>
-            <FormItem v-if="formItem.needPassword && formItem.oj === 'HDU'" label="登录密码" prop="password">
-              <Input type="password" v-model="formItem.password" placeholder="请输入登录密码"></Input>
-            </FormItem>
-          </Form>
-          <div slot="footer">
-            <Button type="success" :loading="add_loading" @click="addPersonalContest()">添加</Button>
-          </div>
-        </Modal>
-    </MenuGroup>
-    <MenuGroup v-if="teamList.length > 0" title="队伍">
+  <Menu ref="menu" theme="light" width="auto" @on-select="selectMenu()">
+    <MenuItem name="Qualifying" :to="{name:'Qualifyings'}">排位赛</MenuItem>
+    <Submenu name="审核" v-if="roles.is_admin">
+      <template slot="title">
+          <Icon type="ios-paper" />
+          审核
+      </template>
+      <MenuItem name="RegisterVerify" :to="{name:'RegisterVerify'}">注册审核</MenuItem>
+      <MenuItem name="RetireVerify" :to="{name:'RetireVerify'}">退役审核</MenuItem>
+      <MenuItem name="AwardVerify" :to="{name:'AwardVerify'}">获奖审核</MenuItem>
+    </Submenu>
+    <Submenu name="个人" v-if="roles.is_student">
+      <template slot="title">
+          <Icon type="ios-paper" />
+          个人
+      </template>
+      <MenuItem name="Overview" :to="{name:'Overview'}">概览</MenuItem>
+      <MenuItem name="MyAcRecord" :to="{name:'MyAcRecord'}">刷题记录</MenuItem>
+      <MenuItem name="MyContest" :to="{name:'MyContest'}">比赛记录</MenuItem>
+      <MenuItem name="addPersonalContestRecord" >申报个人比赛</MenuItem>
+      <Modal v-model="add_personal_contest_modal" width="360">
+        <p slot="header" style="text-align:center">
+          <span>申报个人竞赛</span>
+        </p>
+        <Form :model="formItem" :label-width="100" :rules="rule" ref="addPersonalContestRecordForm">
+          <FormItem label="OJ" prop="oj">
+            <Select v-model="formItem.oj">
+              <Option v-for="item in ojList" :value="item.value" :key="item.value">{{item.label}}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="竞赛ID" prop="cId">
+            <Input v-model="formItem.cId" placeholder="请输入竞赛ID"></Input>
+          </FormItem>
+          <FormItem v-if="formItem.needPassword && formItem.oj !== 'HDU'" label="竞赛密码" prop="password">
+            <Input type="password" v-model="formItem.password" placeholder="请输入参赛密码"></Input>
+          </FormItem>
+          <FormItem label="参赛账号" prop="account">
+            <Input v-model="formItem.account" placeholder="请输入参赛账号"></Input>
+          </FormItem>
+          <FormItem v-if="formItem.needPassword && formItem.oj === 'HDU'" label="登录密码" prop="password">
+            <Input type="password" v-model="formItem.password" placeholder="请输入登录密码"></Input>
+          </FormItem>
+        </Form>
+        <div slot="footer">
+          <Button type="success" :loading="add_loading" @click="addPersonalContest()">添加</Button>
+        </div>
+      </Modal>
+    </Submenu>
+    <Submenu v-if="teamList.length > 0" name="队伍">
+      <template slot="title">
+        <Icon type="ios-paper" />
+        队伍
+      </template>
       <MenuItem v-for="(item,index) in teamList" :name="'Team'+item.id" :to="{name:'Team', params:{id:item.id}}" :key="index">
         <div v-if="item.teamName">
           {{item.teamName}}({{item.seasonName}})
@@ -47,17 +60,29 @@
           未命名({{item.seasonName}})
         </div>
       </MenuItem>
-    </MenuGroup>
-    <MenuGroup title="设置">
-        <MenuItem name="Information" :to="{name:'Information'}">个人信息</MenuItem>
-        <MenuItem v-if="roles.is_student" name="OjAccount" :to="{name:'OjAccount'}">OJ账号</MenuItem>
-    </MenuGroup>
-    <MenuGroup title="排行榜">
-        <MenuItem name="PersonalAcRank" :to="{name:'PersonalAcRank'}">个人刷题榜</MenuItem>
-    </MenuGroup>
-    <MenuGroup v-if="roles.is_admin" title="管理">
-        <MenuItem name="SeasonListAdmin" :to="{name:'SeasonListAdmin'}">赛季管理</MenuItem>
-    </MenuGroup>
+    </Submenu>
+    <Submenu name="设置">
+      <template slot="title">
+        <Icon type="ios-paper" />
+        设置
+      </template>
+      <MenuItem name="Information" :to="{name:'Information'}">个人信息</MenuItem>
+      <MenuItem v-if="roles.is_student" name="OjAccount" :to="{name:'OjAccount'}">OJ账号</MenuItem>
+    </Submenu>
+    <Submenu name="排行榜">
+      <template slot="title">
+        <Icon type="ios-paper" />
+        排行榜
+      </template>
+      <MenuItem name="PersonalAcRank" :to="{name:'PersonalAcRank'}">个人刷题榜</MenuItem>
+    </Submenu>
+    <Submenu v-if="roles.is_admin" name="管理">
+      <template slot="title">
+        <Icon type="ios-paper" />
+        管理
+      </template>
+      <MenuItem name="SeasonListAdmin" :to="{name:'SeasonListAdmin'}">赛季管理</MenuItem>
+    </Submenu>
   </Menu>
 </template>
 
