@@ -26,7 +26,7 @@
   </div>
   <br>
   <div>
-    <Page ref="page" :total="totalNum" :pageSize="pageSize" @on-change="handleGetUsers()" @on-page-size-change="handleGetUsers()" />
+    <Page ref="page" :total="totalNum" :pageSize="pageSize" style="text-align: center;" @on-change="handleGetUsers()" @on-page-size-change="handleGetUsers()" />
   </div>
   </div>
 </template>

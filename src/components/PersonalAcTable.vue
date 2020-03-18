@@ -13,12 +13,19 @@
       {{ row.acNum }}
     </template>
     <template slot-scope="{ row }" slot="awards">
-      {{ row.awards }}
+      <Tooltip v-for="(item,index) in row.awards" :key="index" :content="item.contestType + item.regional + item.level + '奖'">
+        <svg class="icon" aria-hidden="true">
+          <use v-if="item.level === '金'" xlink:href="#icon-jinpai"></use>
+          <use v-if="item.level === '银'" xlink:href="#icon-yinpai2"></use>
+          <use v-if="item.level === '铜'" xlink:href="#icon-tongpaigongchang"></use>
+        </svg>
+      </Tooltip>
     </template>
   </Table>
 </template>
 
 <script>
+  import '@/assets/iconfont.js'
   export default {
     name: 'PersonalAcTable',
     props: {
@@ -49,8 +56,7 @@
           }
         ],
         personalAcList: [],
-        tableLoading: true,
-        includeRetired: false
+        tableLoading: true
       }
     },
     created: function () {
@@ -58,8 +64,7 @@
       that.$http
         .get('/api/personalProblemAcRank', {
           params: {
-            grade: that.grade,
-            includeRetired: that.includeRetired
+            grade: that.grade
           }
         })
         .then(res => {
@@ -75,4 +80,11 @@
 </script>
 
 <style>
+.icon {
+  width: 3em;
+  height: 3em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 </style>

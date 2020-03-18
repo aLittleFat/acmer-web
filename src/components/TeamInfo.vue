@@ -62,6 +62,13 @@
       <template slot="verified" slot-scope="{row}">
         {{row.verified===1?'审核通过':'审核中'}}
       </template>
+      <template slot="level" slot-scope="{row}">
+        <svg class="icon" aria-hidden="true">
+          <use v-if="row.level === '金'" xlink:href="#icon-jinpai"></use>
+          <use v-if="row.level === '银'" xlink:href="#icon-yinpai2"></use>
+          <use v-if="row.level === '铜'" xlink:href="#icon-tongpaigongchang"></use>
+        </svg>
+      </template>
       <template slot="time" slot-scope="{row}">
         {{row.time.split('T')[0]}}
       </template>
@@ -78,6 +85,7 @@
 </template>
 
 <script>
+import '@/assets/iconfont.js'
 export default {
   name: 'TeamInfo',
   props: {
@@ -198,7 +206,7 @@ export default {
         },
         {
           title: '奖项',
-          key: 'level'
+          slot: 'level'
         },
         {
           title: '时间',
@@ -216,7 +224,7 @@ export default {
         },
         {
           title: '奖项',
-          key: 'level'
+          slot: 'level'
         },
         {
           title: '时间',
@@ -338,4 +346,11 @@ export default {
 </script>
 
 <style>
+.icon {
+  width: 3em;
+  height: 3em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 </style>

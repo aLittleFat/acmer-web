@@ -2,6 +2,13 @@
   <div>
     <div>
       <Table :loading="tableLoading" stripe :columns="columns" :data="users">
+        <template slot="level" slot-scope="{row}">
+          <svg class="icon" aria-hidden="true">
+            <use v-if="row.level === '金'" xlink:href="#icon-jinpai"></use>
+            <use v-if="row.level === '银'" xlink:href="#icon-yinpai2"></use>
+            <use v-if="row.level === '铜'" xlink:href="#icon-tongpaigongchang"></use>
+          </svg>
+        </template>
         <template slot-scope="{ row }" slot="time">
           {{row.time.split('T')[0]}}
         </template>
@@ -13,12 +20,13 @@
     </div>
     <br>
     <div>
-      <Page ref="page" :total="totalNum" :pageSize="pageSize" @on-change="handleGetAwards()" @on-page-size-change="handleGetAwards()" />
+      <Page ref="page" :total="totalNum" :pageSize="pageSize" style="text-align: center;" @on-change="handleGetAwards()" @on-page-size-change="handleGetAwards()" />
     </div>
   </div>
 </template>
 
 <script>
+  import '@/assets/iconfont.js'
   export default {
     data () {
       return {
@@ -37,7 +45,7 @@
           },
           {
             title: '奖项',
-            key: 'level'
+            slot: 'level'
           },
           {
             title: '时间',
@@ -124,4 +132,11 @@
 </script>
 
 <style>
+  .icon {
+    width: 3em;
+    height: 3em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
 </style>

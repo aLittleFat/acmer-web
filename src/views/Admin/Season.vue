@@ -7,6 +7,10 @@
         <SeasonTeamTable v-else :id="$route.params.id"></SeasonTeamTable>
       </TabPane>
       <TabPane label="排位赛" name="name2">
+        <QualifyingTable :id="$route.params.id"></QualifyingTable>
+      </TabPane>
+      <TabPane label="账号集" name="name3">
+        <SeasonAccountTable :id="$route.params.id"></SeasonAccountTable>
       </TabPane>
     </Tabs>
   </div>
@@ -15,6 +19,8 @@
 <script>
   import SeasonStudentTable from '@/components/SeasonStudentTable.vue'
   import SeasonTeamTable from '@/components/SeasonTeamTable.vue'
+  import SeasonAccountTable from '@/components/SeasonAccountTable.vue'
+  import QualifyingTable from '@/components/QualifyingTable.vue'
   export default {
     data () {
       return {
@@ -38,7 +44,9 @@
     },
     components: {
       SeasonStudentTable,
-      SeasonTeamTable
+      SeasonTeamTable,
+      SeasonAccountTable,
+      QualifyingTable
     }
   }
 </script>

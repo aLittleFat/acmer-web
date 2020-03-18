@@ -1,34 +1,36 @@
 <template>
   <div>
-    <Button type="success" @click="showAddTeamContestModal()">添加竞赛</Button>
-    <Modal v-model="add_team_contest_modal" width="360">
-      <p slot="header" style="text-align:center">
-        <span>申报组队竞赛</span>
-      </p>
-      <Form :model="formItem" :label-width="100" :rules="rule" ref="addTeamContestRecordForm">
-        <FormItem label="OJ" prop="oj">
-          <Select v-model="formItem.oj">
-            <Option v-for="item in ojList" :value="item.value" :key="item.value">{{item.label}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="竞赛ID" prop="cId">
-          <Input v-model="formItem.cId" placeholder="请输入竞赛ID"></Input>
-        </FormItem>
-        <FormItem v-if="formItem.needPassword && formItem.oj !== 'HDU'" label="竞赛密码" prop="password">
-          <Input type="password" v-model="formItem.password" placeholder="请输入参赛密码"></Input>
-        </FormItem>
-        <FormItem label="参赛账号" prop="account">
-          <Input v-model="formItem.account" placeholder="请输入参赛账号"></Input>
-        </FormItem>
-        <FormItem v-if="formItem.needPassword && formItem.oj === 'HDU'" label="登录密码" prop="password">
-          <Input type="password" v-model="formItem.password" placeholder="请输入登录密码"></Input>
-        </FormItem>
-      </Form>
-      <div slot="footer">
-        <Button type="success" :loading="add_loading" @click="addTeamContest()">添加</Button>
-      </div>
-    </Modal>
-    <Divider />
+    <div v-if="isMyTeam">
+      <Button type="success" @click="showAddTeamContestModal()">添加竞赛</Button>
+      <Modal v-model="add_team_contest_modal" width="360">
+        <p slot="header" style="text-align:center">
+          <span>申报组队竞赛</span>
+        </p>
+        <Form :model="formItem" :label-width="100" :rules="rule" ref="addTeamContestRecordForm">
+          <FormItem label="OJ" prop="oj">
+            <Select v-model="formItem.oj">
+              <Option v-for="item in ojList" :value="item.value" :key="item.value">{{item.label}}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="竞赛ID" prop="cId">
+            <Input v-model="formItem.cId" placeholder="请输入竞赛ID"></Input>
+          </FormItem>
+          <FormItem v-if="formItem.needPassword && formItem.oj !== 'HDU'" label="竞赛密码" prop="password">
+            <Input type="password" v-model="formItem.password" placeholder="请输入参赛密码"></Input>
+          </FormItem>
+          <FormItem label="参赛账号" prop="account">
+            <Input v-model="formItem.account" placeholder="请输入参赛账号"></Input>
+          </FormItem>
+          <FormItem v-if="formItem.needPassword && formItem.oj === 'HDU'" label="登录密码" prop="password">
+            <Input type="password" v-model="formItem.password" placeholder="请输入登录密码"></Input>
+          </FormItem>
+        </Form>
+        <div slot="footer">
+          <Button type="success" :loading="add_loading" @click="addTeamContest()">添加</Button>
+        </div>
+      </Modal>
+      <Divider />
+    </div>
     <Table :loading="tableLoading" :columns="columns" :data="teamContestList">
       <template slot-scope="{ row }" slot="title">
           <router-link :to="{name:'Contest',params:{id:row.contestId}}">{{ row.contestTitle }}</router-link>
@@ -53,31 +55,28 @@
           {
             title: '比赛名称',
             slot: 'title',
-            // fixed: 'left',
             width: 300
           },
           {
             title: 'Solved',
             key: 'solvedNumber',
-            // fixed: 'left',
             width: 90
           },
           {
             title: '罚时',
             key: 'penalty',
-            // fixed: 'left',
             width: 90
           },
           {
             title: '题解',
             slot: 'solution',
-            // fixed: 'left',
             width: 80
           }
         ],
         teamContestList: [],
         problemList: [],
         problemNum: 0,
+        isMyTeam: false,
         tableLoading: true,
         add_team_contest_modal: false,
         add_loading: false,
@@ -147,6 +146,7 @@
           .then(res => {
             if (res.data.status === 0) {
               that.teamContestList = res.data.data.contestRecord
+              that.isMyTeam = res.data.data.isMyTeam
               for (let i = 0; i < that.teamContestList.length; ++i) {
                 that.teamContestList[i].cellClassName = Object()
                 for (let j = 0; j < that.teamContestList[i].solved.length; ++j) {
@@ -212,32 +212,10 @@
         that.add_team_contest_modal = true
       }
     },
-    computed: {
-      // oj () {
-      //   return this.formItem.oj
-      // }
-    },
     watch: {
       teamId: function () {
         this.getData()
       }
-      // oj: function () {
-      //   let that = this
-      //   that.formItem.needPassword = false
-      //   that.formItem.password = ''
-      //   that.formItem.cId = ''
-      //   that.$http
-      //     .get('/api/ojAccount', {
-      //       params: {
-      //         ojName: that.formItem.oj
-      //       }
-      //     })
-      //     .then(res => {
-      //       if (res.data.status === 0) {
-      //         that.formItem.account = res.data.data
-      //       }
-      //     })
-      // }
     }
   }
 </script>
