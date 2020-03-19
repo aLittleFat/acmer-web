@@ -1,6 +1,16 @@
 <template>
   <div>
-    <Button type="primary" @click="showAddModal()">添加排位赛</Button>
+    <Dropdown style="margin-left: 20px">
+      <Button type="primary">
+        添加比赛
+        <Icon type="ios-arrow-down"></Icon>
+      </Button>
+      <DropdownMenu slot="list">
+        <DropdownItem><Button @click="showAddModal()">添加排位赛</Button></DropdownItem>
+        <DropdownItem><Button @click="addBaseScore()">添加基础分</Button></DropdownItem>
+        <DropdownItem><Button @click="addCfScore()">添加CF积分</Button></DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
     <Divider />
     <Table :loading="tableLoading" stripe :columns="columns" :data="qualifyingList">
       <template slot-scope="{ row }" slot="action">
@@ -182,6 +192,32 @@
           .then(res => {
             if (res.data.status === 0) {
               that.$Message.success('删除成功')
+              that.getData()
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      addBaseScore () {
+        let that = this
+        that.$http
+          .post('/api/season/' + that.id + '/baseQualifying')
+          .then(res => {
+            if (res.data.status === 0) {
+              that.$Message.success('添加成功')
+              that.getData()
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      addCfScore () {
+        let that = this
+        that.$http
+          .post('/api/season/' + that.id + '/cfRatingQualifying')
+          .then(res => {
+            if (res.data.status === 0) {
+              that.$Message.success('添加成功')
               that.getData()
             } else {
               that.$Message.error(res.data.msg)

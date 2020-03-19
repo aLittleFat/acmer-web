@@ -1,5 +1,8 @@
 <template>
   <Table :loading="tableLoading" :height="height" :columns="columns" :data="qualifyingScoreList">
+    <template slot-scope="{ index }" slot="rank">
+        {{index + 1}}
+    </template>
     <template slot-scope="{ row }" slot="title">
         <router-link :to="{name:'Contest',params:{id:row.contestId}}">{{ row.contestTitle }}</router-link>
     </template>
