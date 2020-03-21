@@ -139,6 +139,10 @@
             label: 'CodeForces'
           },
           {
+            value: 'Gym',
+            label: 'Gym'
+          },
+          {
             value: '计蒜客',
             label: '计蒜客'
           },

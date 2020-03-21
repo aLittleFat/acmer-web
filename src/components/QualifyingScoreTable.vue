@@ -1,4 +1,5 @@
 <template>
+  <div>
   <Table :loading="tableLoading" :height="height" :columns="columns" :data="qualifyingScoreList">
     <template slot-scope="{ index }" slot="rank">
         {{index + 1}}
@@ -13,9 +14,19 @@
         {{ (row.penalty / 60).toFixed(0) }}
     </template>
     <template slot-scope="{ row }" slot="solution">
-        {{ row.solution }}
+      <Button v-if="row.solution && row.solution !== ''" type="info" @click="showSolutionModal(row.solution)">查看</Button>
     </template>
   </Table>
+  <Modal v-model="edit_modal" width="360">
+    <p slot="header" style="text-align:center">
+      <span>题解</span>
+    </p>
+    <Input v-model="editSolution" :readonly="readOnly" type="textarea" rows="20"></Input>
+    <div slot="footer">
+      <Button v-if="!readOnly" type="success" :loading="edit_loading" @click="handleChangeSolution()">修改</Button>
+    </div>
+  </Modal>
+  </div>
 </template>
 
 <script>
@@ -60,7 +71,10 @@ export default {
         }
       ],
       problemList: [],
-      tableLoading: true
+      tableLoading: true,
+      edit_modal: false,
+      readOnly: true,
+      editSolution: ''
     }
   },
   methods: {
@@ -104,6 +118,12 @@ export default {
             that.$Message.error(res.data.msg)
           }
         })
+    },
+    showSolutionModal (solution) {
+      let that = this
+      that.editSolution = solution
+      that.readOnly = true
+      that.edit_modal = true
     }
   },
   created: function () {

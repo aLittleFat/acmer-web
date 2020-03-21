@@ -36,9 +36,19 @@
           <router-link :to="{name:'Contest',params:{id:row.contestId}}">{{ row.contestTitle }}</router-link>
       </template>
       <template slot-scope="{ row }" slot="solution">
-          {{ row.solution }}
+          <Button v-if="isMyTeam" type="info" @click="showEditModal(row.contestRecordId, row.solution)">编辑</Button>
+          <Button v-else-if="row.solution && row.solution !== ''" type="info" @click="showSolutionModal(row.solution)">查看</Button>
       </template>
     </Table>
+    <Modal v-model="edit_modal" width="360">
+      <p slot="header" style="text-align:center">
+        <span>题解</span>
+      </p>
+      <Input v-model="editSolution" :readonly="readOnly" type="textarea" rows="20"></Input>
+      <div slot="footer">
+        <Button v-if="!readOnly" type="success" :loading="edit_loading" @click="handleChangeSolution()">修改</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -73,6 +83,11 @@
             width: 80
           }
         ],
+        edit_modal: false,
+        readOnly: false,
+        editId: 0,
+        editSolution: '',
+        edit_loading: false,
         teamContestList: [],
         problemList: [],
         problemNum: 0,
@@ -121,6 +136,10 @@
           {
             value: 'CodeForces',
             label: 'CodeForces'
+          },
+          {
+            value: 'Gym',
+            label: 'Gym'
           },
           {
             value: '计蒜客',
@@ -210,6 +229,36 @@
         that.formItem.needPassword = false
         that.$refs['addTeamContestRecordForm'].resetFields()
         that.add_team_contest_modal = true
+      },
+      showEditModal (id, solution) {
+        let that = this
+        that.editSolution = solution
+        that.editId = id
+        that.readOnly = false
+        that.edit_modal = true
+      },
+      showSolutionModal (solution) {
+        let that = this
+        that.editSolution = solution
+        that.readOnly = true
+        that.edit_modal = true
+      },
+      handleChangeSolution () {
+        let that = this
+        that.$http
+          .put('/api/solution', {
+            contestRecordId: that.editId,
+            solution: that.editSolution
+          })
+          .then(res => {
+            if (res.data.status === 0) {
+              that.$Message.success('修改成功')
+              that.getData()
+              that.edit_modal = false
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
       }
     },
     watch: {
