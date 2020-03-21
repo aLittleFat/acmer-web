@@ -67,7 +67,7 @@ export default {
         {
           title: '题解',
           slot: 'solution',
-          width: 80
+          width: 100
         }
       ],
       problemList: [],

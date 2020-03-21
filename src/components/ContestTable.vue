@@ -1,7 +1,8 @@
 <template>
+  <div>
   <Table :columns="columns" :data="contestRecordList">
     <template slot-scope="{ row }" slot="solution">
-        {{ row.solution }}
+        <Button v-if="row.solution && row.solution !== ''" type="info" @click="showSolutionModal(row.solution)">查看</Button>
     </template>
     <template slot-scope="{ index }" slot="rank">
       {{index + 1}}
@@ -13,6 +14,16 @@
       </div>
     </template>
   </Table>
+  <Modal v-model="edit_modal" width="360">
+    <p slot="header" style="text-align:center">
+      <span>题解</span>
+    </p>
+    <Input v-model="editSolution" :readonly="readOnly" type="textarea" rows="20"></Input>
+    <div slot="footer">
+      <Button v-if="!readOnly" type="success" :loading="edit_loading" @click="handleChangeSolution()">修改</Button>
+    </div>
+  </Modal>
+  </div>
 </template>
 
 <script>
@@ -26,38 +37,36 @@
         columns: [
           {
             title: '排名',
-            // fixed: 'left',
             slot: 'rank',
             width: 90
           },
           {
             title: '参赛者',
             slot: 'participants',
-            // fixed: 'left',
             width: 180
           },
           {
             title: 'Solved',
             key: 'solvedNumber',
-            // fixed: 'left',
             width: 90
           },
           {
             title: '罚时',
             key: 'penalty',
-            // fixed: 'left',
             width: 90
           },
           {
             title: '题解',
             slot: 'solution',
-            // fixed: 'left',
-            width: 80
+            width: 100
           }
         ],
         contestRecordList: [],
         problemList: [],
-        tableLoading: true
+        tableLoading: true,
+        edit_modal: false,
+        readOnly: true,
+        editSolution: ''
       }
     },
     created: function () {
@@ -100,6 +109,12 @@
               that.$Message.error(res.data.msg)
             }
           })
+      },
+      showSolutionModal (solution) {
+        let that = this
+        that.editSolution = solution
+        that.readOnly = true
+        that.edit_modal = true
       }
     },
     watch: {

@@ -30,7 +30,7 @@
         <Button size="small" type="success" @click="handleShowAddOjAccountModal('BZOJ')">添加</Button>
       </div>
       <div v-else>
-        <a :href="handleGetAccountHref('https://www.lydsy.com/JudgeOnline/userinfo.php?user=', BzojAccount)" target="_blank">{{ BzojAccount }}</a>
+        <a :href="handleGetAccountHref('http://www.lydsy.com/JudgeOnline/userinfo.php?user=', BzojAccount)" target="_blank">{{ BzojAccount }}</a>
         <Button size="small" type="warning" style="margin-left: 2rem;" @click="handleShowChangeOjAccountModal('BZOJ')">修改</Button>
         <Button size="small" type="error" style="margin-left: 2rem;" @click="confirmDelete('BZOJ')">删除</Button>
       </div>

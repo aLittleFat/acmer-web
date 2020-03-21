@@ -1,7 +1,7 @@
 <template>
   <Menu ref="menu" theme="light" width="auto" @on-select="selectMenu()">
-    <MenuItem name="Qualifying" :to="{name:'Qualifyings'}">排位赛</MenuItem>
-    <MenuItem name="Problem" :to="{name:'Problem'}">题库</MenuItem>
+    <MenuItem name="Qualifying" :to="{name:'Qualifyings'}"><Icon type="ios-flag" />排位赛</MenuItem>
+    <MenuItem name="Problem" :to="{name:'Problem'}"><Icon type="ios-book" />题库</MenuItem>
     <Submenu name="审核" v-if="roles.is_admin">
       <template slot="title">
           <Icon type="ios-paper" />
@@ -13,7 +13,7 @@
     </Submenu>
     <Submenu name="个人" v-if="roles.is_student">
       <template slot="title">
-          <Icon type="ios-paper" />
+          <Icon type="ios-person" />
           个人
       </template>
       <MenuItem name="Overview" :to="{name:'Overview'}">概览</MenuItem>
@@ -50,7 +50,7 @@
     </Submenu>
     <Submenu v-if="teamList.length > 0" name="队伍">
       <template slot="title">
-        <Icon type="ios-paper" />
+        <Icon type="ios-people" />
         队伍
       </template>
       <MenuItem v-for="(item,index) in teamList" :name="'Team'+item.id" :to="{name:'Team', params:{id:item.id}}" :key="index">
@@ -64,7 +64,7 @@
     </Submenu>
     <Submenu name="设置" v-if="roles.is_student">
       <template slot="title">
-        <Icon type="ios-paper" />
+        <Icon type="ios-cog" />
         设置
       </template>
       <MenuItem name="Information" :to="{name:'Information'}">个人信息</MenuItem>
@@ -72,7 +72,7 @@
     </Submenu>
     <Submenu name="排行榜">
       <template slot="title">
-        <Icon type="ios-paper" />
+        <Icon type="ios-podium" />
         排行榜
       </template>
       <MenuItem name="PersonalAcRank" :to="{name:'PersonalAcRank'}">个人刷题榜</MenuItem>
@@ -80,7 +80,7 @@
     </Submenu>
     <Submenu v-if="roles.is_admin" name="管理">
       <template slot="title">
-        <Icon type="ios-paper" />
+        <Icon type="ios-information-circle" />
         管理
       </template>
       <MenuItem name="SeasonListAdmin" :to="{name:'SeasonListAdmin'}">赛季管理</MenuItem>
