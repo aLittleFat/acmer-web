@@ -2,27 +2,30 @@
   <Row>
     <Col span="12">
       <Row>
-        <Col span="10">
-          <Card>
-            <h1>{{studentInfo.name}}</h1>
-            <p>年级： {{studentInfo.grade}}</p>
-            <p>题量： {{studentInfo.acNumber}}</p>
-            <p>CFRating： {{studentInfo.cfRating}}</p>
-            <p>获奖情况：</p>
-            <!-- <p>{{studentInfo.awardList}}</p> -->
-          </Card>
-        </Col>
-        <Col span="10" offset="1">
-          <h3>队伍：</h3>
-          <Table :columns="teamColumns" :data="studentInfo.teams">
-            <template slot-scope="{ row }" slot="teamName">
-              <router-link v-if="row.teamName" :to="{name:'Team',params:{id: row.id}}">{{ row.teamName }}</router-link>
-              <router-link v-else :to="{name:'Team',params:{id: row.id}}">未命名</router-link>
-            </template>
-          </Table>
-        </Col>
+        <Card>
+          <h1>{{studentInfo.name}}</h1>
+          <p>年级： {{studentInfo.grade}}</p>
+          <p>题量： {{studentInfo.acNumber}}</p>
+          <p>CFRating： {{studentInfo.cfRating}}</p>
+          <p>获奖情况：</p>
+          <Tooltip v-for="(item,index) in studentInfo.awardList" :key="index" :content="item.contestType + item.regional + item.level + '奖'">
+            <svg class="icon" aria-hidden="true">
+              <use v-if="item.level === '金'" xlink:href="#icon-jinpai"></use>
+              <use v-if="item.level === '银'" xlink:href="#icon-yinpai2"></use>
+              <use v-if="item.level === '铜'" xlink:href="#icon-tongpaigongchang"></use>
+            </svg>
+          </Tooltip>
+          <!-- <p>{{studentInfo.awardList}}</p> -->
+        </Card>
       </Row>
       <Divider />
+      <h3>队伍：</h3>
+      <Table :columns="teamColumns" :data="studentInfo.teams">
+        <template slot-scope="{ row }" slot="teamName">
+          <router-link v-if="row.teamName" :to="{name:'Team',params:{id: row.id}}">{{ row.teamName }}</router-link>
+          <router-link v-else :to="{name:'Team',params:{id: row.id}}">未命名</router-link>
+        </template>
+      </Table>
     </Col>
     <Col span="12">
       <ve-pie :data="ojChartData" height="300px" :settings="chartSettings"></ve-pie>
@@ -33,6 +36,7 @@
 </template>
 
 <script>
+import '@/assets/iconfont.js'
 export default {
   name: 'StudentInfo',
   props: {
@@ -91,4 +95,11 @@ export default {
 </script>
 
 <style>
+  .icon {
+    width: 3em;
+    height: 3em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
 </style>

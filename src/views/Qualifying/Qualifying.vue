@@ -18,6 +18,9 @@
           </template>
         </Table>
       </TabPane>
+      <TabPane label="AC榜" name="name2">
+        <ve-histogram :data="chartData" :settings="chartSettings" height="700px"></ve-histogram>
+      </TabPane>
       <TabPane v-for="(item,index) in qualifyingList" :label="item.title" :key="index" :name="item.id">
         <QualifyingScoreTable :qualifyingId="item.id"></QualifyingScoreTable>
       </TabPane>
@@ -29,6 +32,9 @@
 import QualifyingScoreTable from '@/components/QualifyingScoreTable.vue'
 export default {
   data () {
+    this.chartSettings = {
+      stack: { 'AC': ['补题数', '赛时解题数'] }
+    }
     return {
       season: null,
       qualifyingList: [],
@@ -51,7 +57,11 @@ export default {
           slot: 'sum',
           sortable: true
         }
-      ]
+      ],
+      chartData: {
+        columns: ['name', '赛时解题数', '补题数'],
+        rows: []
+      }
     }
   },
   methods: {
@@ -97,6 +107,15 @@ export default {
         .then(res => {
           if (res.data.status === 0) {
             that.sumScoreList = res.data.data
+          } else {
+            that.$Message.error(res.data.msg)
+          }
+        })
+      that.$http
+        .get('/api/season/' + that.$route.params.id + '/acChart')
+        .then(res => {
+          if (res.data.status === 0) {
+            that.chartData.rows = res.data.data
           } else {
             that.$Message.error(res.data.msg)
           }

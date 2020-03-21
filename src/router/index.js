@@ -83,6 +83,12 @@ const routes = [
             name: 'PersonalAcRank',
             alias: '',
             component: () => import('@/views/Rank/PersonalAcRank.vue')
+          },
+          {
+            path: 'teamcontestrank',
+            name: 'TeamContestRank',
+            alias: '',
+            component: () => import('@/views/Rank/TeamContestRank.vue')
           }
         ]
       },
@@ -128,6 +134,11 @@ const routes = [
         path: 'qualifying/:id',
         name: 'Qualifying',
         component: () => import('@/views/Qualifying/Qualifying.vue')
+      },
+      {
+        path: 'problem',
+        name: 'Problem',
+        component: () => import('@/views/Problem/Problem.vue')
       }
     ]
   },

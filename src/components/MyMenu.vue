@@ -1,6 +1,7 @@
 <template>
   <Menu ref="menu" theme="light" width="auto" @on-select="selectMenu()">
     <MenuItem name="Qualifying" :to="{name:'Qualifyings'}">排位赛</MenuItem>
+    <MenuItem name="Problem" :to="{name:'Problem'}">题库</MenuItem>
     <Submenu name="审核" v-if="roles.is_admin">
       <template slot="title">
           <Icon type="ios-paper" />
@@ -61,13 +62,13 @@
         </div>
       </MenuItem>
     </Submenu>
-    <Submenu name="设置">
+    <Submenu name="设置" v-if="roles.is_student">
       <template slot="title">
         <Icon type="ios-paper" />
         设置
       </template>
       <MenuItem name="Information" :to="{name:'Information'}">个人信息</MenuItem>
-      <MenuItem v-if="roles.is_student" name="OjAccount" :to="{name:'OjAccount'}">OJ账号</MenuItem>
+      <MenuItem name="OjAccount" :to="{name:'OjAccount'}">OJ账号</MenuItem>
     </Submenu>
     <Submenu name="排行榜">
       <template slot="title">
@@ -75,6 +76,7 @@
         排行榜
       </template>
       <MenuItem name="PersonalAcRank" :to="{name:'PersonalAcRank'}">个人刷题榜</MenuItem>
+      <MenuItem name="TeamContestRank" :to="{name:'TeamContestRank'}">组队训练榜</MenuItem>
     </Submenu>
     <Submenu v-if="roles.is_admin" name="管理">
       <template slot="title">
