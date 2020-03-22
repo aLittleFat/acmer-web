@@ -107,6 +107,17 @@ const routes = [
             path: 'season/:id',
             name: 'SeasonAdmin',
             component: () => import('@/views/Admin/Season.vue')
+          },
+          {
+            path: 'training',
+            name: 'TrainingListAdmin',
+            alias: '',
+            component: () => import('@/views/Admin/TrainingList.vue')
+          },
+          {
+            path: 'training/:id',
+            name: 'TrainingAdmin',
+            component: () => import('@/views/Admin/Training.vue')
           }
         ]
       },
@@ -134,6 +145,16 @@ const routes = [
         path: 'qualifying/:id',
         name: 'Qualifying',
         component: () => import('@/views/Qualifying/Qualifying.vue')
+      },
+      {
+        path: 'training',
+        name: 'TrainingList',
+        component: () => import('@/views/Training/TrainingList.vue')
+      },
+      {
+        path: 'training/:id',
+        name: 'Training',
+        component: () => import('@/views/Training/Training.vue')
       },
       {
         path: 'problem',

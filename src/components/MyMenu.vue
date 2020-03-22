@@ -1,6 +1,7 @@
 <template>
   <Menu ref="menu" theme="light" width="auto" @on-select="selectMenu()">
     <MenuItem name="Qualifying" :to="{name:'Qualifyings'}"><Icon type="ios-flag" />排位赛</MenuItem>
+    <MenuItem name="TrainingList" :to="{name:'TrainingList'}"><Icon type="ios-train" />训练</MenuItem>
     <MenuItem name="Problem" :to="{name:'Problem'}"><Icon type="ios-book" />题库</MenuItem>
     <Submenu name="审核" v-if="roles.is_admin">
       <template slot="title">
@@ -84,6 +85,7 @@
         管理
       </template>
       <MenuItem name="SeasonListAdmin" :to="{name:'SeasonListAdmin'}">赛季管理</MenuItem>
+      <MenuItem name="TrainingListAdmin" :to="{name:'TrainingListAdmin'}">训练管理</MenuItem>
     </Submenu>
   </Menu>
 </template>
