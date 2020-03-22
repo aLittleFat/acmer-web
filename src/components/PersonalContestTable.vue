@@ -8,6 +8,9 @@
         <Button v-if="studentId===''" type="info" @click="showEditModal(row.contestRecordId, row.solution)">编辑</Button>
         <Button v-else-if="row.solution && row.solution !== ''" type="info" @click="showSolutionModal(row.solution)">查看</Button>
     </template>
+    <template slot-scope="{ row }" slot="action">
+        <Button v-if="studentId===''" type="error" @click="deleteContestRecord(row.contestRecordId)">删除</Button>
+    </template>
   </Table>
   <Modal v-model="edit_modal" width="360">
     <p slot="header" style="text-align:center">
@@ -49,6 +52,11 @@
           {
             title: '题解',
             slot: 'solution',
+            width: 100
+          },
+          {
+            title: '操作',
+            slot: 'action',
             width: 100
           }
         ],
@@ -100,6 +108,23 @@
                 })
               }
               that.tableLoading = false
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      deleteContestRecord (id) {
+        let that = this
+        that.$http
+          .delete('/api/contestRecord', {
+            params: {
+              contestRecordId: id
+            }
+          })
+          .then(res => {
+            if (res.data.status === 0) {
+              that.$Message.success('删除成功')
+              that.getData()
             } else {
               that.$Message.error(res.data.msg)
             }

@@ -188,7 +188,7 @@
               .then(res => {
                 if (res.data.status === 0) {
                    that.$Message.success('添加成功')
-                   that.getData()
+                   that.$router.go(0)
                    that.add_team_loading = false
                    that.addTeamModal = false
                 } else {
@@ -234,7 +234,7 @@
           .then(res => {
             if (res.data.status === 0) {
               that.$Message.success('删除成功')
-              that.getData()
+              that.$router.go(0)
             } else {
               that.$Message.error(res.data.msg)
             }

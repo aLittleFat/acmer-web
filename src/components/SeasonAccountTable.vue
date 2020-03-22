@@ -157,6 +157,7 @@
                 that.add_loading = false
                 if (res.data.status === 0) {
                   that.$Message.success('添加成功')
+                  that.$router.go(0)
                   that.add_modal = false
                 } else {
                   that.$Message.error(res.data.msg)
@@ -174,7 +175,7 @@
           .then(res => {
             if (res.data.status === 0) {
               that.$Message.success('删除成功')
-              that.getData()
+              that.$router.go(0)
             } else {
               that.$Message.error(res.data.msg)
             }

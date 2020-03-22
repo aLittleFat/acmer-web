@@ -3,7 +3,7 @@
         <Layout>
             <Header>
                 <Menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo"></div>
+                    <div class="layout-logo"><p>SCAUACM</p></div>
                     <div class="layout-nav">
                       <Row type="flex" justify="end" class="code-row-bg">
                         <div v-if="userName === ''">
@@ -82,12 +82,15 @@
 .layout-logo{
     width: 100px;
     height: 30px;
-    background: #5b6270;
+    font-family: "微软雅黑";
+    /* background: #5b6270; */
     border-radius: 3px;
     float: left;
-    position: relative;
+    text-align: center;
+    /* position: relative; */
     top: 15px;
     left: 20px;
+    color: #ffffff;
 }
 .layout-nav{
     width: 420px;

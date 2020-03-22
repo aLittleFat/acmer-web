@@ -11,6 +11,7 @@
         <DropdownItem><Button @click="addCfScore()">添加CF积分</Button></DropdownItem>
       </DropdownMenu>
     </Dropdown>
+    <Button type="success" style="margin-left: 1rem;" @click="updateQualifying()">更新排位赛</Button>
     <Divider />
     <Table :loading="tableLoading" stripe :columns="columns" :data="qualifyingList">
       <template slot-scope="{ row }" slot="action">
@@ -223,6 +224,18 @@
             if (res.data.status === 0) {
               that.$Message.success('添加成功')
               that.getData()
+            } else {
+              that.$Message.error(res.data.msg)
+            }
+          })
+      },
+      updateQualifying () {
+        let that = this
+        that.$http
+          .put('/api/season/' + that.id + '/qualifyingContestRecord')
+          .then(res => {
+            if (res.data.status === 0) {
+              that.$Message.success('后台正在更新中')
             } else {
               that.$Message.error(res.data.msg)
             }
