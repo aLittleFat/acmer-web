@@ -86,6 +86,7 @@
       </template>
       <MenuItem name="SeasonListAdmin" :to="{name:'SeasonListAdmin'}">赛季管理</MenuItem>
       <MenuItem name="TrainingListAdmin" :to="{name:'TrainingListAdmin'}">训练管理</MenuItem>
+      <MenuItem name="StudentAdmin" :to="{name:'StudentAdmin'}">队员管理</MenuItem>
     </Submenu>
   </Menu>
 </template>
