@@ -2,11 +2,15 @@
   <Row>
     <Col span="12">
       <Row>
-        <Card>
-          <h1>{{studentInfo.name}}</h1>
-          <p>年级： {{studentInfo.grade}}</p>
+        <Card style="font-size: 16px;">
+          <h1>{{studentInfo.user.name}}</h1>
+          <p>年级： {{studentInfo.user.grade}}</p>
+          <p>学号： {{studentInfo.user.studentId}}</p>
+          <p>邮箱： {{studentInfo.user.email}}</p>
+          <p>手机： {{studentInfo.user.phone}}</p>
+          <p>QQ： {{studentInfo.user.qq}}</p>
+          <p>ICPC邮箱： {{studentInfo.user.icpcEmail}}</p>
           <p>题量： {{studentInfo.acNumber}}</p>
-          <p>CFRating： {{studentInfo.cfRating}}</p>
           <p>获奖情况：</p>
           <Tooltip v-for="(item,index) in studentInfo.awardList" :key="index" :content="item.contestType + item.regional + item.level + '奖'">
             <svg class="icon" aria-hidden="true">
@@ -15,7 +19,6 @@
               <use v-if="item.level === '铜'" xlink:href="#icon-tongpaigongchang"></use>
             </svg>
           </Tooltip>
-          <!-- <p>{{studentInfo.awardList}}</p> -->
         </Card>
       </Row>
       <Divider />
