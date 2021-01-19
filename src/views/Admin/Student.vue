@@ -19,7 +19,7 @@
         </div>
       </template>
       <template slot-scope="{ row }" slot="action">
-          <Button type="error" size="small" @click="handleDelete(row.studentId)">删除</Button>
+          <Button v-if="row.isAdmin !== 1" type="error" size="small" @click="handleDelete(row.studentId)">删除</Button>
           <Button v-if="row.isAdmin !== 1" type="primary" size="small" style="margin-left: 1rem" @click="handleSetAdmin(row.studentId)">设为管理员</Button>
       </template>
     </Table>

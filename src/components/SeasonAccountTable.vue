@@ -10,7 +10,7 @@
     <Modal
       v-model="add_modal">
       <p slot="header" style="text-align:center">
-          <span>添加参赛者</span>
+          <span>添加账号集</span>
       </p>
       <Form :model="formItem" :rules="rule" ref="addSeasonAccountForm">
         <FormItem label="名称" prop="title">
@@ -157,7 +157,7 @@
                 that.add_loading = false
                 if (res.data.status === 0) {
                   that.$Message.success('添加成功')
-                  that.$router.go(0)
+                  that.getData()
                   that.add_modal = false
                 } else {
                   that.$Message.error(res.data.msg)
@@ -175,7 +175,7 @@
           .then(res => {
             if (res.data.status === 0) {
               that.$Message.success('删除成功')
-              that.$router.go(0)
+              that.getData()
             } else {
               that.$Message.error(res.data.msg)
             }

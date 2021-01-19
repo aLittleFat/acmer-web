@@ -104,13 +104,17 @@ export default {
             that.qualifyingScoreList = res.data.data
             for (let i = 0; i < that.qualifyingScoreList.length; ++i) {
               that.qualifyingScoreList[i].cellClassName = Object()
-              var solvedList = that.qualifyingScoreList[i].solved.split(' ')
-              for (let j = 0; j < solvedList.length; ++j) {
-                that.qualifyingScoreList[i].cellClassName[solvedList[j]] = 'table-ac-cell'
+              if (that.qualifyingScoreList[i].solved) {
+                var solvedList = that.qualifyingScoreList[i].solved.split(' ')
+                for (let j = 0; j < solvedList.length; ++j) {
+                  that.qualifyingScoreList[i].cellClassName[solvedList[j]] = 'table-ac-cell'
+                }
               }
-              var upSolvedList = that.qualifyingScoreList[i].upSolved.split(' ')
-              for (let j = 0; j < upSolvedList.length; ++j) {
-                that.qualifyingScoreList[i].cellClassName[upSolvedList[j]] = 'table-up-cell'
+              if (that.qualifyingScoreList[i].upSolved) {
+                var upSolvedList = that.qualifyingScoreList[i].upSolved.split(' ')
+                for (let j = 0; j < upSolvedList.length; ++j) {
+                  that.qualifyingScoreList[i].cellClassName[upSolvedList[j]] = 'table-up-cell'
+                }
               }
             }
             that.tableLoading = false

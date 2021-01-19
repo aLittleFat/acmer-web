@@ -18,6 +18,9 @@
               <router-link :to="{name:'Team',params:{id:row.teamId}}" v-if="row.teamId">{{row.students}}</router-link>
             </div>
           </template>
+          <template slot-scope="{ row }" slot="penalty">
+            {{(row.penalty / 60).toFixed(0)}}
+          </template>
         </Table>
         <Modal v-model="edit_modal" width="360">
           <p slot="header" style="text-align:center">
@@ -69,7 +72,7 @@
           },
           {
             title: '罚时',
-            key: 'penalty',
+            slot: 'penalty',
             width: 90
           },
           {

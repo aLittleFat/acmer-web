@@ -30,7 +30,7 @@
                   <Content :style="{padding: '24px', minHeight: '810px', background: '#fff'}">
                       <router-view></router-view>
                   </Content>
-                  <Footer class="layout-footer-center">2020 &copy; Fat</Footer>
+                  <Footer class="layout-footer-center">&copy;2020-{{thisYear}} Zhang Hong-hai</Footer>
                 </Layout>
             </Layout>
         </Layout>
@@ -42,7 +42,8 @@
     data () {
       return {
         history: [],
-        userName: ''
+        userName: '',
+        thisYear: new Date().getFullYear()
       }
     },
     components: {

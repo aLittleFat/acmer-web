@@ -8,6 +8,7 @@
               <div>
               <router-view></router-view>
               </div>
+              <p style="color: #b0b0b0;">请使用Chrome或360极速浏览器访问</p>
           </Card>
       </Col>
   </Row>

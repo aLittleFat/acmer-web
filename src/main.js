@@ -4,12 +4,18 @@ import router from './router'
 import store from './store'
 import VueRouter from 'vue-router'
 import './plugins/iview.js'
-import VCharts from 'v-charts'
+import VeIndex from 'v-charts'
+// import VCharts from 'v-charts'
+// import VeHistogram from 'v-charts/lib/histogram.common.js'
+// import VePie from 'v-charts/lib/pie.common.js'
 import http from './http.js'
 Vue.prototype.$http = http
 
 Vue.use(VueRouter)
-Vue.use(VCharts)
+Vue.use(VeIndex)
+// Vue.use(VCharts)
+// Vue.component(VeHistogram.name, VeHistogram)
+// Vue.component(VePie.name, VePie)
 Vue.config.productionTip = false
 
 new Vue({

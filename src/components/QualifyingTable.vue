@@ -132,7 +132,7 @@
             message: '请输入竞赛ID'
           }],
           proportion: [{
-            type: 'number',
+            pattern: /^[1-9]d*.d*|0.d*[1-9]d*|^[1-9]d*$/,
             required: true,
             tigger: 'blur',
             message: '请输入权重'

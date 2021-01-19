@@ -19,7 +19,7 @@
         </Table>
       </TabPane>
       <TabPane label="AC榜" name="name2">
-        <ve-histogram :data="chartData" :settings="chartSettings" height="700px"></ve-histogram>
+        <ve-histogram :data="chartData" :settings="chartSettings" :extend="chartExtend" height="700px"></ve-histogram>
       </TabPane>
       <TabPane v-for="(item,index) in qualifyingList" :label="item.title" :key="index" :name="item.id">
         <QualifyingScoreTable :qualifyingId="item.id"></QualifyingScoreTable>
@@ -34,6 +34,12 @@ export default {
   data () {
     this.chartSettings = {
       stack: { 'AC': ['补题数', '赛时解题数'] }
+    }
+    this.chartExtend = {
+      series: {
+        barWidth: 20
+      },
+      'xAxis.0.axisLabel.rotate': 45
     }
     return {
       season: null,

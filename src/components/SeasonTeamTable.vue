@@ -4,7 +4,7 @@
     <Divider />
     <Table :loading="tableLoading" stripe :height="580" :columns="columns" :data="seasonTeamList">
       <template slot-scope="{ row }" slot="rank">
-        {{row.team.rank}}队
+        {{row.team.rankNum}}队
       </template>
       <template slot-scope="{ row }" slot="nameCn">
         <router-link :to="{name:'Team', params:{id:row.team.id}}">
@@ -63,7 +63,7 @@
       </p>
       <Form :model="formItem" :label-width="120" :rules="rule" ref="addTeamForm">
         <FormItem label="队伍编号" prop="rank">
-          <Input v-model="formItem.rank" placeholder="请输入队伍编号"></Input>
+          <Input v-model="formItem.rank" type="number" placeholder="请输入队伍编号"></Input>
         </FormItem>
         <FormItem label="VJ账号" prop="vjAccount">
           <Input v-model="formItem.vjAccount" placeholder="请输入vj账号"></Input>
@@ -107,14 +107,8 @@
         rule: {
           rank: [{
             required: true,
-            type: 'number',
+            pattern: /^\d{1,}$/,
             message: '请输入数字',
-            trigger: 'blur'
-          }],
-          vjAccount: [{
-            required: true,
-            type: 'string',
-            message: '请输入VJ账号',
             trigger: 'blur'
           }]
         },
@@ -169,7 +163,7 @@
         let that = this
         that.$refs[name].resetFields()
         if (that.seasonTeamList.length > 0) {
-          that.formItem.rank = that.seasonTeamList[that.seasonTeamList.length - 1].team.rank + 1
+          that.formItem.rank = that.seasonTeamList[that.seasonTeamList.length - 1].team.rankNum + 1
         } else {
           that.formItem.rank = 1
         }
@@ -188,7 +182,7 @@
               .then(res => {
                 if (res.data.status === 0) {
                    that.$Message.success('添加成功')
-                   that.$router.go(0)
+                   that.getData()
                    that.add_team_loading = false
                    that.addTeamModal = false
                 } else {
@@ -234,7 +228,7 @@
           .then(res => {
             if (res.data.status === 0) {
               that.$Message.success('删除成功')
-              that.$router.go(0)
+              that.getData()
             } else {
               that.$Message.error(res.data.msg)
             }
